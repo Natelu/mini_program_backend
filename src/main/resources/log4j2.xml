@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF" monitorInterval="1800">
+
+    <properties>
+        <!-- log打印到本地的路径 -->
+        <property name="LOG_HOME">log</property>
+        <property name="LOG_FILE_NAME">log</property>
+    </properties>
+    <Appenders>
+        <!-- 控制台打印日志 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p (%F:%L) - %m%n" />
+        </Console>
+        <!-- 日志信息输出到文件配置 -->
+        <RollingRandomAccessFile name="LogFile"
+                                 fileName="${LOG_HOME}/${LOG_FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/%d{yyyy-MM-dd}.%i.log.gz">
+            <PatternLayout
+                    pattern="%d %-5p (%F:%L) - %m%n"/>
+            <Policies>
+                <!-- TimeBasedTriggeringPolicy指定的size是1，结合起来就是1天生成一个新文件。如果filePattern改成%d{yyyy-MM-dd HH}.gz,此时最小粒度为小时，则每一个小时生成一个文件。 -->
+                <TimeBasedTriggeringPolicy/>
+                <!--  指定当文件体积大于size指定的值时，触发Rolling -->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- 指定最多保存的文件个数 -->
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 3rdparty Loggers -->
+        <logger name="org.springframework.core" level="error">
+        </logger>
+        <logger name="org.springframework.beans" level="error">
+        </logger>
+        <logger name="org.springframework.context" level="error">
+        </logger>
+        <logger name="org.springframework.web" level="error">
+        </logger>
+        <logger name="org.springframework.boot" level="error">
+        </logger>
+        <!-- 下面的logger需要修改为你的项目根路径，如com.sd -->
+        <logger name="com.info.share.mini" level="debug" includeLocation="true" additivity="false">
+            <appender-ref ref="LogFile"/>
+            <appender-ref ref="Console"/>
+        </logger>
+        <!-- 将druid连接池的sql语句打印到日志文件中 -->
+        <logger name="druid.sql.Statement" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="LogFile"/>
+        </logger>
+        <root level="info" includeLocation="true">
+            <appender-ref ref="LogFile"/>
+            <appender-ref ref="Console"/>
+        </root>
+    </Loggers>
+</Configuration>

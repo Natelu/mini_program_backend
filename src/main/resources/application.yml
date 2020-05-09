@@ -1,0 +1,71 @@
+server:
+  port: 8090
+
+#spring.datasource.du
+
+spring:
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name:
+      url: jdbc:mysql://39.100.150.192:33306/mini?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      # 连接池配置
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 连接等待超时时间
+      max-wait: 30000
+      # 配置检测可以关闭的空闲连接间隔时间
+      time-between-eviction-runs-millis: 60000
+      # 配置连接在池中的最小生存时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+#  data:
+#    elasticsearch:
+#      cluster-name:
+#      repositories:
+#        enabled: true
+#      client:
+#        reactive:
+#          endpoints: http://39.100.150.192:9200
+
+
+
+
+mybatis:
+  configuration:
+    type-aliases-package: com.info.share.mini.entity
+#    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    map-underscore-to-camel-case: true
+#    auto-mapping-unknown-column-behavior:
+#    mapperLocations: classpath:mapper/*.xml
+
+wechat:
+  code2SessionUrl: https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+  appId:
+  appSecret:
+
+#debug: true
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+#logging:
+#  pattern:
+#    console: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{15} - %msg%n'
+#    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{15} - %msg%n'
+#  file:
+#    name: log/log.out
