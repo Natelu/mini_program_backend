@@ -126,12 +126,12 @@ public class ArticleServiceImpl implements ArticleService {
     public JSONObject detailArticle(String openId, String articleId){
         JSONObject res = new JSONObject();
         Article article = null;
-        List<User> users = null;
+        User user = null;
         try{
             article = articleMapper.fetchArticleDetail(articleId);
             logger.info(article.getPublishTime());
-            users = userMapper.getUserInfo(openId);
-            User user = users.get(0);
+            user = userMapper.getUserInfo(openId);
+//            User user = users.get(0);
             if (user.getRank() == 0){ //普通用户，不显示全部内容;
                 res.put("isVip", false);
                 article.setContent("");

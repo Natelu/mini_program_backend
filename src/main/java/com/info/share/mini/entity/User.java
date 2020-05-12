@@ -11,12 +11,7 @@ public class User implements Serializable {
 
     private String name;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date createTime;
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date deleteTime;
-
+    // vip 等级
     private int rank;
 
     private String tel;
@@ -27,11 +22,50 @@ public class User implements Serializable {
 
     private String nick_name;
 
+    private String weChat;
+
     private int gender;
 
     private String country;
 
+    private String province;
+
     private String city;
+
+    private String company;
+
+    private String position;
+
+    private boolean showNumber;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date createTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date deleteTime;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id:'" + id + '\'' +
+                ", name:'" + name + '\'' +
+                ", rank:" + rank +
+                ", tel:'" + tel + '\'' +
+                ", openid:'" + openid + '\'' +
+                ", unionid:'" + unionid + '\'' +
+                ", nick_name:'" + nick_name + '\'' +
+                ", weChat:'" + weChat + '\'' +
+                ", gender:" + gender +
+                ", country:'" + country + '\'' +
+                ", province:'" + province + '\'' +
+                ", city:'" + city + '\'' +
+                ", company:'" + company + '\'' +
+                ", position:'" + position + '\'' +
+                ", showNumber:" + showNumber +
+                ", createTime:" + createTime +
+                ", deleteTime:" + deleteTime +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -39,6 +73,30 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 
     public String getOpenid() {
@@ -81,6 +139,14 @@ public class User implements Serializable {
         this.country = country;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public String getCity() {
         return city;
     }
@@ -89,12 +155,28 @@ public class User implements Serializable {
         this.city = city;
     }
 
-    public String getName() {
-        return name;
+    public String getCompany() {
+        return company;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public boolean isShowNumber() {
+        return showNumber;
+    }
+
+    public void setShowNumber(boolean showNumber) {
+        this.showNumber = showNumber;
     }
 
     public Date getCreateTime() {
@@ -113,30 +195,15 @@ public class User implements Serializable {
         this.deleteTime = deleteTime;
     }
 
-    public int getRank() {
-        return rank;
+    public String getWeChat() {
+        String tmpWeChat = "";
+        if(this.isShowNumber()){ // show_number 为true 才显示微信号；
+            tmpWeChat = weChat;
+        }
+        return tmpWeChat;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setWeChat(String weChat) {
+        this.weChat = weChat;
     }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-//    public String toString(){
-//        return "User{" +
-//                "id='" + id + '\'' +
-//                ", name='" + name + '\'' +
-//                ", rank=" + rank+
-//                ", tel=" + tel+
-//                ", createTime=" + createTime +
-//                ", deleteTime=" + deleteTime +
-//                '}';
-//    }
 }

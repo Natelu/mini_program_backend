@@ -11,4 +11,13 @@ public interface UserService {
     JSONObject createUser(String openId, String name, String tel);
 
     JSONObject wechatAuth(String userId);
+
+    Boolean checkVip(String openId);
+
+    JSONObject register(String openId);
+
+    boolean checkExists(String openId);
+
+    // 升级用户为vip
+    JSONObject update2Vip(String openId);
 }

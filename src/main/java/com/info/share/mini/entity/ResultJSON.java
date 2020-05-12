@@ -23,6 +23,10 @@ public class ResultJSON {
         ResultJSON result = new ResultJSON(200, "操作成功", null);
         return result;
     }
+    public static ResultJSON success(int code, String msg){
+        ResultJSON result = new ResultJSON(code, msg, null);
+        return result;
+    }
 
     // 成功返回<有返回数据>
     public static ResultJSON success(Object responseData) {
@@ -133,4 +137,20 @@ public class ResultJSON {
                 ", pageCount:" + pageCount +
                 '}';
     }
+
+    public String toSimpleDataString(){
+        return "{" +
+                "code:" + code  +
+                ", responseData:" + responseData +
+                ", msg:'" + msg + '\'' +
+                '}';
+    }
+
+    public String toSimpleString(){
+        return "{" +
+                "code:" + code  +
+                ", msg:'" + msg + '\'' +
+                '}';
+    }
 }
+

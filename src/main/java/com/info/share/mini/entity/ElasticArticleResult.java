@@ -1,5 +1,7 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class ElasticArticleResult {
 
         private String author;
@@ -14,6 +16,7 @@ public class ElasticArticleResult {
 
         private String index; // 索引
 
+        @JSONField(format = "yyyy-MM-dd HH:mm:ss")
         private String publishTime;
 
         public String getAuthor() {

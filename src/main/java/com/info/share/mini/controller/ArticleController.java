@@ -27,19 +27,6 @@ public class ArticleController {
     @Resource(name = "articleService")
     private ArticleService articleService;
 
-//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private Date publish_time;
-    @GetMapping(value = "/user/{open_id}/info", produces = {"application/json;charset=UTF-8"})
-    public String fetchUser(@PathVariable("open_id") String openId, HttpServletRequest request,
-                            HttpServletResponse response){
-        logger.info("request url is : " + request.getRequestURL());
-        Cookie[] cookie = request.getCookies();
-        JSONObject userRes = userService.fetchUser(cookie, openId);
-        response.setStatus(userRes.getInteger("status"));
-        return JSONObject.toJSONString(userRes.get("data"));
-    }
-
     @ApiOperation(value = "最新-文章列表", notes= "文章列表， 按日期倒序。", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNumber", value = "查询当前页", paramType = "query", dataType = "Integer", defaultValue = "1"),
@@ -56,7 +43,7 @@ public class ArticleController {
 
     @ApiOperation(value = "主题-文章列表", notes= "文章列表", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "theme", value = "主题", paramType = "path", required = true,defaultValue = "营销增长"),
+            @ApiImplicitParam(name = "theme", value = "主题", paramType = "path", required = true, defaultValue = "营销增长"),
             @ApiImplicitParam(name = "pageNumber", value = "查询当前页", paramType = "query", dataType = "Integer", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "每页文章数", paramType = "query", dataType = "Integer", defaultValue = "10")
     })
@@ -111,6 +98,7 @@ public class ArticleController {
             @ApiImplicitParam(name = "page", value = "查询当前页", paramType = "query", dataType = "Integer", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "每页文章数", paramType = "query", dataType = "Integer", defaultValue = "10")
     })
+
     @GetMapping(value = "/article/search/{keyword}", produces = {"application/json;charset=UTF-8"})
     public String searchArticle(@PathVariable("keyword") String keyword,
                                 @RequestParam(value = "page", defaultValue = "1") int page,
