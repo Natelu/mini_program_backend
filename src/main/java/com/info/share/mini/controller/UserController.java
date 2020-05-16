@@ -1,8 +1,11 @@
 package com.info.share.mini.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,16 +25,18 @@ public class UserController {
     @Resource(name = "userService")
     private UserService userService;
 
+    @ApiOperation(value = "获取用户信息", notes= "获取用户信息", httpMethod = "GET")
     @GetMapping(value = "/user/{open_id}/info", produces = {"application/json;charset=UTF-8"})
     public String fetchUser(@PathVariable("open_id") String openId, HttpServletRequest request,
                             HttpServletResponse response){
         logger.info("request url is : " + request.getRequestURL());
         Cookie[] cookie = request.getCookies();
         JSONObject userRes = userService.fetchUser(cookie, openId);
-        response.setStatus(userRes.getInteger("status"));
-        return JSONObject.toJSONString(userRes.get("data"));
+        response.setStatus(userRes.getInteger("code"));
+        return JSONObject.toJSONString(userRes);
     }
 
+    @ApiOperation(value = "用户注册", notes= "用户注册", httpMethod = "GET")
     @GetMapping(value = "/user/register", produces = {"application/json;charset=UTF-8"})
     public String register(@RequestParam("openid") String openid,
                            HttpServletResponse response){
@@ -41,10 +46,27 @@ public class UserController {
         return JSONObject.toJSONString(res);
     }
 
+    @ApiOperation(value = "设置VIP", notes= "设置用户为VIP", httpMethod = "PUT")
     @PutMapping(value = "/user/setVip", produces = {"application/json;charset=UTF-8"})
     public String setVip(@RequestParam("openid") String openId, HttpServletResponse response){
         JSONObject res = userService.update2Vip(openId);
         response.setStatus(res.getIntValue("code"));
+        return JSONObject.toJSONString(res);
+    }
+
+    @ApiOperation(value = "获取该邀请的VIP用户", tags = "获取邀请的VIP用户", httpMethod = "GET")
+    @GetMapping(value = "/user/invitedVips", produces = {"application/json;charset=UTF-8"})
+    public String getInvitedVipByUser(@RequestParam("openid") String openId,
+                                      HttpServletResponse response){
+        JSONObject res = new JSONObject();
+        if (userService.checkExists(openId)){
+            res = userService.invitedVipUsersByOpenId(openId);
+        }else { //用户不存在
+            res.put("code", 202);
+            res.put("msg", "we have none this user.");
+        }
+        response.setStatus(res.getIntValue("code"));
+        logger.info(res.toJSONString());
         return JSONObject.toJSONString(res);
     }
 }

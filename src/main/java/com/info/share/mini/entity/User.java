@@ -38,10 +38,10 @@ public class User implements Serializable {
 
     private boolean showNumber;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date deleteTime;
 
     @Override
@@ -62,8 +62,8 @@ public class User implements Serializable {
                 ", company:'" + company + '\'' +
                 ", position:'" + position + '\'' +
                 ", showNumber:" + showNumber +
-                ", createTime:" + createTime +
-                ", deleteTime:" + deleteTime +
+                ", createTime:" + dateTime2string(createTime) +
+                ", deleteTime:" + dateTime2string(deleteTime) +
                 '}';
     }
 
@@ -205,5 +205,12 @@ public class User implements Serializable {
 
     public void setWeChat(String weChat) {
         this.weChat = weChat;
+    }
+
+    public String dateTime2string(Date dateTime){
+        if (dateTime != null){
+            return dateTime.toString();
+        }
+        return null;
     }
 }

@@ -20,4 +20,6 @@ public interface UserService {
 
     // 升级用户为vip
     JSONObject update2Vip(String openId);
+
+    JSONObject invitedVipUsersByOpenId(String openId);
 }

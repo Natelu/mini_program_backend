@@ -31,6 +31,12 @@ public interface UserMapper {
             "tel=#{tel}, we_chat=#{weChat}, show_number=#{showNumber} where openid=#{openId}")
     void updateUserInfo(String openId, String name, String company, String country, String province, String city, String tel, String weChat,
                         boolean showNumber);
+
+    // 将用户升级为vip
     @Update("update user set user.rank=1 where openid=#{openId}")
     void update2Vip(String openId);
+
+    // 查询经用户邀请并成为vip的用户
+    @Select("select * from user where invited_by=#{openId} and user.`rank`=1")
+    List<User> getInviteUsers(String openId);
 }

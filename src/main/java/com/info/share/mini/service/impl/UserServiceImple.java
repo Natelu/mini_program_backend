@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,28 +32,21 @@ public class UserServiceImple implements UserService {
 
     @Override
     public JSONObject fetchUser(Cookie[] cookies, String openId){
+        ResultJSON resUser ;
         JSONObject res = new JSONObject();
-        int status = 200;
-        String msg = "";
-        logger.info("查询的openID " + openId);
         try {
-            User users = userMapper.getUserInfo(openId);
-//            logger.info("")
-            if (users!= null){
-                res.put("data", users);
-                msg = "user " + openId +" select successfully.";
+            User user = userMapper.getUserInfo(openId);
+            if (user!= null){
+                res.put("userInfo", user);
+                resUser = ResultJSON.success(res);
             }else{
-                status = 201;
-//                res.put("message", "has none user which openid is " + openId);
+                resUser = ResultJSON.success(202, "has none user which openid is " + openId);
             }
         }catch (Exception e){
-            status = 500;
-            msg = e.getLocalizedMessage();
+            resUser = ResultJSON.error(e.getLocalizedMessage());
         }
-        res.put("status", status);
-        res.put("message", msg);
-        logger.info(msg);
-        return res;
+        logger.info(resUser.toSimpleDataString());
+        return JSONObject.parseObject(resUser.toSimpleDataString());
     }
 
     @Override
@@ -165,6 +159,30 @@ public class UserServiceImple implements UserService {
             return JSONObject.parseObject(res.toSimpleString());
         }
         res = ResultJSON.success(200, "update successfully.");
+        return JSONObject.parseObject(res.toSimpleString());
+    }
+
+    @Override
+    public JSONObject invitedVipUsersByOpenId(String openId){
+
+        List<User> users ;
+        ResultJSON res;
+        try {
+            users = userMapper.getInviteUsers(openId);
+            JSONObject tmp_res = new JSONObject();
+            int count = 0;
+            if (!users.isEmpty()){
+                count = users.size();
+            }
+            tmp_res.put("count", count);
+            tmp_res.put("invitedVipPerson", users);
+            res = ResultJSON.success(tmp_res);
+            return JSONObject.parseObject(res.toSimpleDataString());
+        }catch (Exception e){
+            logger.info(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        logger.info(res.toSimpleDataString());
         return JSONObject.parseObject(res.toSimpleString());
     }
 }

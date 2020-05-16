@@ -8,9 +8,9 @@ spring:
     druid:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name:
-      url: jdbc:mysql://39.100.150.192:33306/mini?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-      username: root
-      password: 123456
+      url: jdbc:mysql://${DB_MYSQL_IP}:${DB_MYSQL_PORT}/mini?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
       # 连接池配置
       initial-size: 5
       min-idle: 5
