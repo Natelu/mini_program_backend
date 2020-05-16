@@ -16,6 +16,7 @@ public class EsConf {
                 .connectedTo("39.100.150.192:9200")
                 .build();
         RestHighLevelClient client = RestClients.create(configuration).rest();
+        System.out.println(client.toString());
         return client;
     }
 }

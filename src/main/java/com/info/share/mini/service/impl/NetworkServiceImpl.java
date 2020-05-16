@@ -6,20 +6,23 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.info.share.mini.controller.ArticleController;
-import com.info.share.mini.entity.Network;
-import com.info.share.mini.entity.ResultJSON;
-import com.info.share.mini.entity.User;
+import com.info.share.mini.entity.*;
 import com.info.share.mini.mapper.NetworkMapper;
 import com.info.share.mini.mapper.UserMapper;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
+import com.info.share.mini.utils.HighLightSearch;
 import io.swagger.annotations.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
 import java.util.List;
 
 @Api(value = "2. 人脉接口列表", tags = {"人脉接口列表"})
@@ -127,5 +130,45 @@ public class NetworkServiceImpl implements NetworkService {
             res = ResultJSON.error(e.getLocalizedMessage());
         }
         return JSONObject.parseObject(res.toSimpleDataString());
+    }
+
+    @Override
+    public JSONObject searchNetwork(String keyword, int page, int pageSize){
+//        String index, String type, String[] fields, int page, int pageSize
+        String[] fields = {"name", "company", "position", "abstract", "province", "city"};
+        HighLightSearch searchClient = new HighLightSearch("network", "network", fields, page, pageSize);
+        SearchHits searchHits = searchClient.search(keyword);
+
+        long total = searchHits.getTotalHits();
+        long totalPage = total % pageSize == 0 ? total / pageSize : (total / pageSize + 1 );
+
+        SearchHit[] hits = searchHits.getHits();
+        List<ElasticNetworkResult> networks = new LinkedList<>();
+        if (hits.length <= 0) {
+            return null;
+        }
+        for (SearchHit hit:hits){
+            ElasticNetworkResult tmpNetwork = new ElasticNetworkResult();
+            JSONObject temp = JSONObject.parseObject(hit.getSourceAsString());
+            for(String field : fields){
+                HighlightField esField = hit.getHighlightFields().get(field);
+//                logger.info(temp.getString(field));
+                if (esField != null){
+                    temp.put(field, esField.fragments()[0].string());
+                }
+            }
+            tmpNetwork.setId(temp.getString("id"));
+            tmpNetwork.setOpenid(temp.getString("openid"));
+            tmpNetwork.setCompany(temp.getString("company"));
+            tmpNetwork.setPosition(temp.getString("position"));
+            tmpNetwork.setAbstract(temp.getString("abstract"));
+            tmpNetwork.setProvince(temp.getString("province"));
+            tmpNetwork.setCity(temp.getString("city"));
+            tmpNetwork.setUpdateTime(temp.getString("update_time"));
+            networks.add(tmpNetwork);
+        }
+        ResultJSON res = ResultJSON.success(page, pageSize, (int)totalPage, networks);
+        logger.info(res.toString());
+        return JSONObject.parseObject(res.toString());
     }
 }

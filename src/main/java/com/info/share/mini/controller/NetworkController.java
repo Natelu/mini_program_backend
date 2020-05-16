@@ -51,8 +51,9 @@ public class NetworkController {
         return JSONObject.toJSONString(res);
     }
 
-    // 获取人脉列表
-    @RequestMapping(value = "/list/byCount", produces = {"application/json;charset=UTF-8"})
+    // 获取人脉列表 (通过readCount 由高到低排序）
+    @ApiOperation(value = "人脉列表", notes= "人脉， 按阅读量倒序。", httpMethod = "GET")
+    @GetMapping(value = "/list/byCount", produces = {"application/json;charset=UTF-8"})
     public String listNetworkByCount(@RequestParam(value = "pageNumber" , defaultValue = "1") int page,
                                      @RequestParam(value = "pageSize" , defaultValue = "10") int pageSize,
                                      HttpServletResponse response){
@@ -61,7 +62,8 @@ public class NetworkController {
         return JSONObject.toJSONString(res);
     }
 
-    @RequestMapping(value = "/detail/{open_id}/{network_id}", produces = {"application/json;charset=UTF-8"})
+    @ApiOperation(value = "人脉详情", notes= "人脉详情", httpMethod = "GET")
+    @GetMapping(value = "/detail/{open_id}/{network_id}", produces = {"application/json;charset=UTF-8"})
     public String detailNetwork(@PathVariable("open_id") String openId,
                                 @PathVariable("network_id") String networkId,
                                 HttpServletResponse response){
@@ -69,6 +71,18 @@ public class NetworkController {
         response.setStatus(res.getIntValue("code"));
         return JSONObject.toJSONString(res);
     }
+
+    @ApiOperation(value = "人脉搜索", notes= "人脉搜索", httpMethod = "GET")
+    @GetMapping(value = "/search/{keyword}", produces = {"application/json;charset=UTF-8"})
+    public String searchNetwork(@PathVariable("keyword") String keyword,
+                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                HttpServletResponse response){
+        JSONObject res = networkService.searchNetwork(keyword, page, pageSize);
+        response.setStatus(res.getIntValue("code"));
+        return JSONObject.toJSONString(res);
+    }
+
     private User buildUser(JSONObject body){
         User user = new User();
         user.setOpenid(body.getString("openId"));

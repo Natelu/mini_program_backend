@@ -174,6 +174,7 @@ public class ArticleServiceImpl implements ArticleService {
         sourceBuilder.highlighter(highlightBuilder);
         sourceBuilder.timeout(new TimeValue(1000));
         searchRequest.source(sourceBuilder);
+        searchRequest.types("article");
 
         //搜索
         SearchResponse response = null;

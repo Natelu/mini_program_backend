@@ -9,14 +9,95 @@ public class ElasticNetworkResult {
     // 人脉id
     private String id;
 
-    private String openId;
+    private String openid;
 
-    private User user;
+    private String company;
 
-    private int weight;
+    private String position;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date update_time;
+    private String city;
 
+    private String province;
 
+    private String Abstract;
+
+    private String updateTime;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id:'" + id + '\'' +
+                ", openid:'" + openid + '\'' +
+                ", company:'" + company + '\'' +
+                ", position:'" + position + '\'' +
+                ", city:'" + city + '\'' +
+                ", province:'" + province + '\'' +
+                ", Abstract:'" + Abstract + '\'' +
+                ", updateTime:'" + updateTime + '\'' +
+                '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAbstract() {
+        return Abstract;
+    }
+
+    public void setAbstract(String anAbstract) {
+        Abstract = anAbstract;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 }

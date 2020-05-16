@@ -14,4 +14,7 @@ public interface NetworkService {
     JSONObject listNetworkByCount(int page, int pageSize);
 
     JSONObject getNetworkDetail(String openid, String id);
+
+    // 根据关键字搜索人脉
+    JSONObject searchNetwork(String keyword, int page, int pageSize);
 }

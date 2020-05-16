@@ -130,7 +130,7 @@ public class ResultJSON {
         return "{" +
                 "code:" + code  +
                 ", msg:'" + msg + '\'' +
-                ", responseData:" + responseData +
+                ", responseData:" + responseData.toString() +
                 ", currentPage:" + currentPage +
                 ", pageSize:" + pageSize +
                 ", recordCount:" + recordCount +
