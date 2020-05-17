@@ -44,11 +44,8 @@ spring:
 mybatis:
   configuration:
     type-aliases-package: com.info.share.mini.entity
-#    map-underscore-to-camel-case: true
     call-setters-on-nulls: true
     map-underscore-to-camel-case: true
-#    auto-mapping-unknown-column-behavior:
-#    mapperLocations: classpath:mapper/*.xml
 
 wechat:
   code2SessionUrl: https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code

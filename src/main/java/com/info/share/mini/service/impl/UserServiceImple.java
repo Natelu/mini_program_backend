@@ -2,6 +2,7 @@ package com.info.share.mini.service.impl;
 
 import com.info.share.mini.entity.Network;
 import com.info.share.mini.entity.ResultJSON;
+import com.info.share.mini.entity.UserInfoBasic;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
 import com.info.share.mini.entity.User;
@@ -93,6 +94,7 @@ public class UserServiceImple implements UserService {
         }
     }
 
+    // 这里的逻辑，注册完用户后，顺便生成一个空的人脉信息，方便升级vip后直接更新人脉信息
     @Override
     public JSONObject register(String openId){
         ResultJSON res;
@@ -125,6 +127,25 @@ public class UserServiceImple implements UserService {
         return JSONObject.parseObject(res.toSimpleString());
     }
 
+    // 获取用户简要信息
+    @Override
+    public JSONObject getBasicUserInfo(String openId){
+        ResultJSON res;
+        JSONObject tmp_user = new JSONObject();
+        try {
+            UserInfoBasic userInfoBasic = userMapper.getUserInfoBasic(openId);
+            if (userInfoBasic!= null){
+                tmp_user.put("basicUserInfo", userInfoBasic);
+                res = ResultJSON.success(tmp_user);
+            }else{
+                res = ResultJSON.success(202, "has none user which openid is " + openId);
+            }
+        }catch (Exception e){
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        logger.info(res.toSimpleDataString());
+        return JSONObject.parseObject(res.toSimpleDataString());
+    }
     @Override
     public boolean checkExists(String openId){
         User user = null;

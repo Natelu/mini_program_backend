@@ -1,22 +1,32 @@
 package com.info.share.mini.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Field;
+
 public class UserInfoBasic {
 
     private String id;
 
+    @Id
     private String openId;
+
 
     private String name;
 
+
     private String country;
+
 
     private String province;
 
+
     private String city;
+
 
     private String company;
 
     //公司职位
+
     private String position;
 
     private String avatarUrl;

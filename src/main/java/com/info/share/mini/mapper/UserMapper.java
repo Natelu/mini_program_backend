@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 @Service(value = "userMapper")
 public interface UserMapper {
+
     @Insert("insert into user(id, openid, name, create_time, tel) values(" +
             "#{id}, #{openId}, #{name}, now(), #{tel})")
     void createUser(@Param("id") String id, @Param("openId") String openId, @Param("name") String name, @Param("tel") String tel);
@@ -20,6 +21,10 @@ public interface UserMapper {
 //    @Result()
     @Select("select * from user where openid=#{openId}")
     User getUserInfo(@Param("openId") String openId);
+    
+    // 获取用户简要信息
+    @Select("select id, openid, name, country, province, company, position, avatar_url from user where openid=#{openId}")
+    UserInfoBasic getUserInfoBasic(@Param("openId") String openId);
 
     @Select("select (id, openId, name, country, province, city, company, position, avatar_url) where openid = #{openId}")
     UserInfoBasic fetchUserInfoBasic(@Param("openId") String openId);

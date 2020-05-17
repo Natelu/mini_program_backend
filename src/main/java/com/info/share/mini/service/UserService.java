@@ -10,6 +10,8 @@ public interface UserService {
 
     JSONObject createUser(String openId, String name, String tel);
 
+    JSONObject getBasicUserInfo(String openId);
+
     JSONObject wechatAuth(String userId);
 
     Boolean checkVip(String openId);
@@ -22,4 +24,5 @@ public interface UserService {
     JSONObject update2Vip(String openId);
 
     JSONObject invitedVipUsersByOpenId(String openId);
+
 }

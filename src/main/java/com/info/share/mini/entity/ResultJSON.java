@@ -1,4 +1,5 @@
 package com.info.share.mini.entity;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.StringUtils;
 
 public class ResultJSON {
@@ -139,6 +140,9 @@ public class ResultJSON {
     }
 
     public String toSimpleDataString(){
+        if (this.responseData ==null){
+            this.responseData = "null";
+        }
         return "{" +
                 "code:" + code  +
                 ", responseData:" + responseData +

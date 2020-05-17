@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -102,14 +103,20 @@ public class NetworkServiceImpl implements NetworkService {
     public JSONObject listNetworkByCount(int page, int pageSize){
         ResultJSON res;
         List<Network> networks;
+        List<JSONObject> networksWithUserInfo = new ArrayList<>();
         try{
             PageHelper.startPage(page, pageSize);
             networks = networkMapper.listNetwork();
             PageInfo pageInfo = new PageInfo(networks);
             int totalPage = pageInfo.getPages();
-            JSONObject tmp = new JSONObject();
-            tmp.put("networks", networks);
-            res = ResultJSON.success(page, totalPage, pageSize, tmp);
+            for (Network nt: networks){
+                JSONObject tmp = new JSONObject();
+                UserInfoBasic userInfo = userMapper.getUserInfoBasic(nt.getOpenId());
+                tmp.put("network", nt);
+                tmp.put("userInfo", userInfo);
+                networksWithUserInfo.add(tmp);
+            }
+            res = ResultJSON.success(page, totalPage, pageSize, networksWithUserInfo);
         }catch (Exception e){
             logger.info(e.getLocalizedMessage());
             res = ResultJSON.error(e.getLocalizedMessage());
@@ -122,8 +129,11 @@ public class NetworkServiceImpl implements NetworkService {
         ResultJSON res ;
         try{
             Network network = networkMapper.fetchNetworkDetail(openid);
+            UserInfoBasic userInfoBasic = userMapper.getUserInfoBasic(openid);
             JSONObject tmp = new JSONObject();
             tmp.put("network", network);
+            tmp.put("basicUserInfo", userInfoBasic);
+            logger.info(tmp.toJSONString());
             res = ResultJSON.success(tmp);
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
