@@ -54,7 +54,7 @@ public class UserController {
         return JSONObject.toJSONString(res);
     }
 
-    @ApiOperation(value = "获取该邀请的VIP用户", tags = "获取邀请的VIP用户", httpMethod = "GET")
+    @ApiOperation(value = "获取该邀请的VIP用户", notes = "获取邀请的VIP用户", httpMethod = "GET")
     @GetMapping(value = "/user/invitedVips", produces = {"application/json;charset=UTF-8"})
     public String getInvitedVipByUser(@RequestParam("openid") String openId,
                                       HttpServletResponse response){

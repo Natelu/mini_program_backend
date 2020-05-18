@@ -1,5 +1,6 @@
 package com.info.share.mini.entity;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.util.StringUtils;
 
 public class ResultJSON {
@@ -140,14 +141,15 @@ public class ResultJSON {
     }
 
     public String toSimpleDataString(){
-        if (this.responseData ==null){
-            this.responseData = "null";
-        }
-        return "{" +
-                "code:" + code  +
-                ", responseData:" + responseData +
-                ", msg:'" + msg + '\'' +
-                '}';
+//        if (this.responseData ==null){
+//            this.responseData = "null";
+//        }
+//        return "{" +
+//                "code:" + code  +
+//                ", responseData:" + responseData +
+//                ", msg:'" + msg + '\'' +
+//                '}';
+        return JSONObject.toJSONString(responseData, SerializerFeature.WriteMapNullValue);
     }
 
     public String toSimpleString(){

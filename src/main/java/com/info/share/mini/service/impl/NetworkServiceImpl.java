@@ -2,6 +2,7 @@ package com.info.share.mini.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -130,6 +131,7 @@ public class NetworkServiceImpl implements NetworkService {
         try{
             Network network = networkMapper.fetchNetworkDetail(openid);
             UserInfoBasic userInfoBasic = userMapper.getUserInfoBasic(openid);
+            logger.info("***userINFO to String " + userInfoBasic.toString());
             JSONObject tmp = new JSONObject();
             tmp.put("network", network);
             tmp.put("basicUserInfo", userInfoBasic);

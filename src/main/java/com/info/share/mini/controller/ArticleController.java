@@ -33,13 +33,15 @@ public class ArticleController {
             @ApiImplicitParam(name = "pageSize", value = "每页文章数", paramType = "query", dataType = "Integer", defaultValue = "10")
     })
     @GetMapping(value = "/article/listByTime", produces = {"application/json;charset=UTF-8"})
-    public String fetArticleByTime(@RequestParam(value = "pageNumber", defaultValue = "1") int page,
+    public JSONObject fetArticleByTime(@RequestParam(value = "pageNumber", defaultValue = "1") int page,
                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                    HttpServletResponse response){
         JSONObject res = articleService.listArticleByTime(page, pageSize);
         response.setStatus(res.getIntValue("code"));
-        return JSONObject.toJSONString(res);
+//        return JSONObject.toJSONString(res);
+        return res;
     }
+
 
     @ApiOperation(value = "主题-文章列表", notes= "文章列表", httpMethod = "GET")
     @ApiImplicitParams({

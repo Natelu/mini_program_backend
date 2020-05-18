@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 
-public class wechatAuth {
+public class wechatAuthUtil {
 
     @Value("${wechat.appId}")
     private static String appId;
@@ -35,7 +35,7 @@ public class wechatAuth {
     }
 
     // 通过前台的code获取用户的openid、sessionKey;
-    public JSONObject code2Session(String code){
+    public static JSONObject code2Session(String code){
         JSONObject res = null;
         String tempUrl = sessionKeyUrl;
         tempUrl = tempUrl.replace("APPID", appId);

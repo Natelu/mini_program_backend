@@ -1,4 +1,5 @@
 package com.info.share.mini.controller;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.info.share.mini.entity.Network;
 import com.info.share.mini.entity.User;
@@ -64,12 +65,13 @@ public class NetworkController {
 
     @ApiOperation(value = "人脉详情", notes= "人脉详情", httpMethod = "GET")
     @GetMapping(value = "/detail/{open_id}/{network_id}", produces = {"application/json;charset=UTF-8"})
-    public String detailNetwork(@PathVariable("open_id") String openId,
-                                @PathVariable("network_id") String networkId,
-                                HttpServletResponse response){
+    public JSONObject detailNetwork(@PathVariable("open_id") String openId,
+                              @PathVariable("network_id") String networkId,
+                              HttpServletResponse response){
         JSONObject res = networkService.getNetworkDetail(openId, networkId);
         response.setStatus(res.getIntValue("code"));
-        return JSONObject.toJSONString(res);
+//        return JSONObject.toJSONString(res);
+        return res;
     }
 
     @ApiOperation(value = "人脉搜索", notes= "人脉搜索", httpMethod = "GET")
