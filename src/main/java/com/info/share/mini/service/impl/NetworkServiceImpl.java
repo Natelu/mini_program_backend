@@ -2,6 +2,7 @@ package com.info.share.mini.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,9 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Api(value = "2. 人脉接口列表", tags = {"人脉接口列表"})
 @Service("networkService")
@@ -42,6 +41,13 @@ public class NetworkServiceImpl implements NetworkService {
 
     @Resource(name = "networkMapper")
     private NetworkMapper networkMapper;
+
+    @Override
+    public void addReadCountByOne(String openID) {
+        int count = networkMapper.getReadCount(openID);
+        count ++;
+        networkMapper.updateCount(openID, count);
+    }
 
     @Override
     public JSONObject createNull(String id, String openid, int weight){
@@ -128,6 +134,10 @@ public class NetworkServiceImpl implements NetworkService {
     @Override
     public JSONObject getNetworkDetail(String openid, String id){
         ResultJSON res ;
+        if (!userService.checkExists(openid)){
+            res = ResultJSON.success(404, "we have none this user!");
+            return JSONObject.parseObject(res.toSimpleString());
+        }
         try{
             Network network = networkMapper.fetchNetworkDetail(openid);
             UserInfoBasic userInfoBasic = userMapper.getUserInfoBasic(openid);

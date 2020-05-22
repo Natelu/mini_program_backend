@@ -1,12 +1,19 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
 public class User {
 
+    private String openid;
+
     private String id;
+
+    private String unionid;
 
     private String name;
 
@@ -15,9 +22,8 @@ public class User {
 
     private String tel;
 
-    private String openid;
 
-    private String unionid;
+
 
     private String nick_name;
 
@@ -37,33 +43,25 @@ public class User {
 
     private boolean showNumber;
 
-//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private String avatarUrl;
+
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date deleteTime;
 
     @Override
     public String toString() {
-        return "{" +
-                "id:'" + id + '\'' +
-                ", name:'" + name + '\'' +
-                ", rank:" + rank +
-                ", tel:'" + tel + '\'' +
-                ", openid:'" + openid + '\'' +
-                ", unionid:'" + unionid + '\'' +
-                ", nick_name:'" + nick_name + '\'' +
-                ", weChat:'" + weChat + '\'' +
-                ", gender:" + gender +
-                ", country:'" + country + '\'' +
-                ", province:'" + province + '\'' +
-                ", city:'" + city + '\'' +
-                ", company:'" + company + '\'' +
-                ", position:'" + position + '\'' +
-                ", showNumber:" + showNumber +
-                ", createTime:" + dateTime2string(createTime) +
-                ", deleteTime:" + dateTime2string(deleteTime) +
-                '}';
+        return JSONObject.toJSONString(this, SerializerFeature.WriteMapNullValue);
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getId() {

@@ -55,12 +55,12 @@ public class NetworkController {
     // 获取人脉列表 (通过readCount 由高到低排序）
     @ApiOperation(value = "人脉列表", notes= "人脉， 按阅读量倒序。", httpMethod = "GET")
     @GetMapping(value = "/list/byCount", produces = {"application/json;charset=UTF-8"})
-    public String listNetworkByCount(@RequestParam(value = "pageNumber" , defaultValue = "1") int page,
+    public JSONObject listNetworkByCount(@RequestParam(value = "pageNumber" , defaultValue = "1") int page,
                                      @RequestParam(value = "pageSize" , defaultValue = "10") int pageSize,
                                      HttpServletResponse response){
         JSONObject res = networkService.listNetworkByCount(page, pageSize);
         response.setStatus(res.getIntValue("code"));
-        return JSONObject.toJSONString(res);
+        return res;
     }
 
     @ApiOperation(value = "人脉详情", notes= "人脉详情", httpMethod = "GET")
@@ -70,7 +70,9 @@ public class NetworkController {
                               HttpServletResponse response){
         JSONObject res = networkService.getNetworkDetail(openId, networkId);
         response.setStatus(res.getIntValue("code"));
-//        return JSONObject.toJSONString(res);
+        if (res.getIntValue("code") == 200){
+            networkService.addReadCountByOne(openId);
+        }
         return res;
     }
 

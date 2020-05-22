@@ -42,9 +42,11 @@ public class HttpUtil {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity entity = new HttpEntity<>(null, headers);
-        RestTemplate template;
+//        RestTemplate
+        RestTemplate template = new RestTemplate();
         if (protocol.equals("https")){
-            template = new RestTemplate((new HttpsClientRequestFactory()));
+//            template = new RestTemplate((new HttpsClientRequestFactory()));
+            template.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
         }else{
             template = new RestTemplate();
         }

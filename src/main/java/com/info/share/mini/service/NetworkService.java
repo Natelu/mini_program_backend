@@ -15,6 +15,9 @@ public interface NetworkService {
 
     JSONObject getNetworkDetail(String openid, String id);
 
+    // 人脉阅读量加1
+    void addReadCountByOne(String openID);
+
     // 根据关键字搜索人脉
     JSONObject searchNetwork(String keyword, int page, int pageSize);
 }

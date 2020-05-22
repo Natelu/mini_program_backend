@@ -27,13 +27,13 @@ public class UserController {
 
     @ApiOperation(value = "获取用户信息", notes= "获取用户信息", httpMethod = "GET")
     @GetMapping(value = "/user/{open_id}/info", produces = {"application/json;charset=UTF-8"})
-    public String fetchUser(@PathVariable("open_id") String openId, HttpServletRequest request,
+    public JSONObject fetchUser(@PathVariable("open_id") String openId, HttpServletRequest request,
                             HttpServletResponse response){
         logger.info("request url is : " + request.getRequestURL());
         Cookie[] cookie = request.getCookies();
         JSONObject userRes = userService.fetchUser(cookie, openId);
         response.setStatus(userRes.getInteger("code"));
-        return JSONObject.toJSONString(userRes);
+        return userRes;
     }
 
     @ApiOperation(value = "用户注册", notes= "用户注册", httpMethod = "GET")

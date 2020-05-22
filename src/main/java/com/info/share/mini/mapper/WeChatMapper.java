@@ -13,7 +13,7 @@ public interface WeChatMapper {
     WeChatAuthInfo getAuthInfo(@Param(value = "openId") String openId);
 
     // 插入新用户的认证信息
-    @Insert("insert into wechat_auth (openid, session_key, update_time, union_id) values(#{openId}, #{sessionKey}, " +
+    @Insert("insert into wechat_auth (openid, session_key, unionid, update_time) values(#{openId}, #{sessionKey}, " +
             "#{unionId}, now())")
     void insertAuthInfo(String openId, String sessionKey, String unionId);
 

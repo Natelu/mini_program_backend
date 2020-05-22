@@ -45,19 +45,36 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource(name = "highLevelClient")
     private RestHighLevelClient esClient;
+
+    // 访问文章详情，在相应的阅读量加1
+    @Override
+    public JSONObject addReadCountByOne(String articleId){
+        ResultJSON res ;
+        int count = 0;
+        try{
+            count = articleMapper.getReadCount(articleId);
+            count++;
+            articleMapper.updateCount(articleId, count);
+            res = ResultJSON.success(200, "successfully plus one.");
+        }catch (Exception e){
+            logger.info(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toSimpleString());
+    }
     //theme 文章列表
     @Override
-    public JSONObject listArticle(String theme, int pageNumber, int pageSize){
+    public JSONObject listArticle(String theme, int page, int pageSize){
         ResultJSON res = null;
+        List<Article> list = null;
         try{
-            PageHelper.startPage(pageNumber, pageSize);
-            List<Article> list = articleMapper.listArticle(theme);
+            PageHelper.startPage(page, pageSize);
+            list = articleMapper.listArticle(theme);
             PageInfo pageInfo = new PageInfo(list);
             int totalPage = pageInfo.getPages();
-            int currPage = pageInfo.getPageNum();
-            JSONObject data = new JSONObject();
-            data.put("articles", list);
-            res = ResultJSON.success(currPage, pageSize, totalPage, data);
+            JSONObject temp = new JSONObject();
+            temp.put("articles", list);
+            res = ResultJSON.success(page, pageSize, totalPage, temp);
         }catch (Exception e){
             logger.info(e.getLocalizedMessage());
             res = ResultJSON.error(e.getLocalizedMessage());
@@ -81,13 +98,12 @@ public class ArticleServiceImpl implements ArticleService {
             res = ResultJSON.error(e.getLocalizedMessage());
             logger.info(e.getLocalizedMessage());
         }
-
         return JSONObject.parseObject(res.toString());
     }
 
     @Override
     public JSONObject uploadArticle(String title, String content, String tag, String author, String theme,
-                                    String preview, String publishTime) throws ParseException {
+                                    String preview, String publishTime, String themeImg) throws ParseException {
         String id = UUID.randomUUID().toString();
         id = id.replace("-", "");
         String contentPreview = preview;
@@ -96,17 +112,11 @@ public class ArticleServiceImpl implements ArticleService {
             author = "匿名";
         }
         logger.info("title: " + title);
-//        logger.info("content: " + content);
-//        logger.info("content_preview : " + contentPreview);
-//        logger.info("tag: " + tag);
-//        logger.info("author :" + author);
-//        logger.info("theme :" + theme);
-//        logger.info("time :" + publishTime);
         try{
             String isThere = articleMapper.fetchArticleByName(title);
             logger.info("是否存在：" + isThere);
             if (isThere == null){
-                articleMapper.uploadArticle(id, title, author, content, contentPreview, theme, tag, publishTime);
+                articleMapper.uploadArticle(id, title, author, content, contentPreview, theme, tag, publishTime, themeImg);
                 res.put("status", 200);
                 res.put("message", "article has been inserted successfully!");
             }else{
@@ -199,8 +209,6 @@ public class ArticleServiceImpl implements ArticleService {
             HighlightField esField2 = hit.getHighlightFields().get(field2);
             logger.info(temp.getString("title"));
             if (esField1 != null){
-//                String str = esField1.fragments()[0].toString()
-//                article.setTitle(esField1.fragments()[0].toString());
                 logger.info(esField1.fragments()[0].toString());
                 temp.put("title", esField1.fragments()[0].string());
             }

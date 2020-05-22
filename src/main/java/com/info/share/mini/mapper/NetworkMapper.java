@@ -1,10 +1,7 @@
 package com.info.share.mini.mapper;
 
 import com.info.share.mini.entity.Network;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,4 +33,11 @@ public interface NetworkMapper {
     // 人脉详情
     @Select("select * from networks where openid = #{openId}")
     Network fetchNetworkDetail(@Param("openId") String openId);
+
+    // 阅读量获取
+    @Select("select read_count from networks where openid=#{openId}")
+    int getReadCount(String openId);
+
+    @Update("update networks set read_count=#{count} where openid=#{openId}")
+    void updateCount(String openId, int count);
 }

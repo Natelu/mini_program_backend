@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -50,14 +51,14 @@ public class ArticleController {
             @ApiImplicitParam(name = "pageSize", value = "每页文章数", paramType = "query", dataType = "Integer", defaultValue = "10")
     })
     @GetMapping(value = "/article/list/{theme}", produces = {"application/json;charset=UTF-8"})
-    public String fetchArticleList(@PathVariable("theme") String themeName,
+    public JSONObject fetchArticleList(@PathVariable("theme") String themeName,
                                    @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                    HttpServletRequest request, HttpServletResponse response){
 //        int page = Integer.parseInt(pageNumber);
         JSONObject listRes = articleService.listArticle(themeName, pageNumber, pageSize);
         response.setStatus(listRes.getIntValue("code"));
-        return JSONObject.toJSONString(listRes);
+        return listRes;
     }
 
     @PostMapping(value = "/article/upload", produces = {"application/json;charset=UTF-8"})
@@ -70,9 +71,10 @@ public class ArticleController {
         String theme = body.getString("theme");
         String preview = body.getString("preview");
         String publish_time = body.getString("publish_time");
+        String themeImg = body.getString("theme_image");
         JSONObject res = new JSONObject();
         try{
-            res = articleService.uploadArticle(title, content, tag, author, theme, preview, publish_time);
+            res = articleService.uploadArticle(title, content, tag, author, theme, preview, publish_time, themeImg);
         }catch (Exception e){
             logger.info(e.getLocalizedMessage());
         }
@@ -82,13 +84,15 @@ public class ArticleController {
 
     @ApiOperation(value = "文章详情", notes= "文章详情", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "article_id", value = "主题", paramType = "path", required = true),
+            @ApiImplicitParam(name = "article_id", value = "文章ID", paramType = "path", required = true),
             })
     @GetMapping(value = "/article/{article_id}/info", produces = {"application/json;charset=UTF-8"})
     public String getArticle(@PathVariable("article_id") String articleId,
                              @RequestParam(value = "openId") String openId,
                              HttpServletResponse response){
         JSONObject articleRes = articleService.detailArticle(openId, articleId);
+        JSONObject addReadCount = articleService.addReadCountByOne(articleId); // 文章阅读量+1
+        logger.info(addReadCount.toJSONString());
         response.setStatus(articleRes.getIntValue("status"));
 //        return articleRes.toJSONString();
         return JSONObject.toJSONString(articleRes);
@@ -109,4 +113,5 @@ public class ArticleController {
         JSONObject res = articleService.searchArticle(keyword, page, pageSize);
         return JSONObject.toJSONString(res);
     }
+
 }

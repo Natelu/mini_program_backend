@@ -132,7 +132,7 @@ public class ResultJSON {
         return "{" +
                 "code:" + code  +
                 ", msg:'" + msg + '\'' +
-                ", responseData:" + responseData.toString() +
+                ", responseData:" + JSONObject.toJSONString(responseData, SerializerFeature.WriteMapNullValue) +
                 ", currentPage:" + currentPage +
                 ", pageSize:" + pageSize +
                 ", recordCount:" + recordCount +
@@ -141,15 +141,11 @@ public class ResultJSON {
     }
 
     public String toSimpleDataString(){
-//        if (this.responseData ==null){
-//            this.responseData = "null";
-//        }
-//        return "{" +
-//                "code:" + code  +
-//                ", responseData:" + responseData +
-//                ", msg:'" + msg + '\'' +
-//                '}';
-        return JSONObject.toJSONString(responseData, SerializerFeature.WriteMapNullValue);
+        return "{" +
+                "code:" + code  +
+                ", responseData:" + JSONObject.toJSONString(responseData, SerializerFeature.WriteMapNullValue) +
+                ", msg:'" + msg + '\'' +
+                '}';
     }
 
     public String toSimpleString(){

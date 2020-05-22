@@ -10,7 +10,7 @@ public interface ArticleService {
 
     //文章上传
     JSONObject uploadArticle(String title, String content, String tag, String author, String theme,
-                             String preview, String publishTime) throws ParseException;
+                             String preview, String publishTime, String themeImg) throws ParseException;
 
     // 按专题给出文章列表
     JSONObject listArticle(String theme, int pageNumber, int pageSize);
@@ -19,6 +19,8 @@ public interface ArticleService {
     JSONObject listArticleByTime(int page, int pageSize);
 
     JSONObject detailArticle(String openId, String article);
+
+    JSONObject addReadCountByOne(String articleId);
 
     JSONObject searchArticle(String keyword, int page, int pageSize);
 

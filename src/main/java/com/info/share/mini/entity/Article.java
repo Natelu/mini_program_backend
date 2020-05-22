@@ -1,7 +1,6 @@
 package com.info.share.mini.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -19,12 +18,22 @@ public class Article {
 
     private String theme;
 
+    private String themeImage;
+
     private String tag;
 
-    private int readCont;
+    private int readCount;
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
+
+    public int getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(int readCount) {
+        this.readCount = readCount;
+    }
 
     public String getId() {
         return id;
@@ -82,20 +91,20 @@ public class Article {
         this.tag = tag;
     }
 
-    public int getReadCont() {
-        return readCont;
-    }
-
-    public void setReadCont(int readCont) {
-        this.readCont = readCont;
-    }
-
     public Date getPublishTime() {
         return publishTime;
     }
 
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public String getThemeImage() {
+        return themeImage;
+    }
+
+    public void setThemeImage(String themeImage) {
+        this.themeImage = themeImage;
     }
 
     @Override
@@ -107,8 +116,9 @@ public class Article {
                 ", content:'" + content + '\'' +
                 ", contentPreview:'" + contentPreview + '\'' +
                 ", theme:'" + theme + '\'' +
+                ", themeImage:'" + themeImage + '\'' +
                 ", tag:'" + tag + '\'' +
-                ", readCont:" + readCont +
+                ", readCont:" + readCount +
                 ", publishTime:" + publishTime +
                 '}';
     }

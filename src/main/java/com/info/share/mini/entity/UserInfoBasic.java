@@ -1,5 +1,7 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Field;
 
@@ -33,17 +35,18 @@ public class UserInfoBasic {
 
     @Override
     public String toString() {
-        return "{" +
-                "id:'" + id + '\'' +
-                ", openId:'" + openId + '\'' +
-                ", name:'" + name + '\'' +
-                ", country:'" + country + '\'' +
-                ", province:'" + province + '\'' +
-                ", city:'" + city + '\'' +
-                ", company:'" + company + '\'' +
-                ", position:'" + position + '\'' +
-                ", avatarUrl:'" + avatarUrl + '\'' +
-                '}';
+        return JSONObject.toJSONString(this, SerializerFeature.WriteMapNullValue);
+//        return "{" +
+//                "id:'" + id + '\'' +
+//                ", openId:'" + openId + '\'' +
+//                ", name:'" + name + '\'' +
+//                ", country:'" + country + '\'' +
+//                ", province:'" + province + '\'' +
+//                ", city:'" + city + '\'' +
+//                ", company:'" + company + '\'' +
+//                ", position:'" + position + '\'' +
+//                ", avatarUrl:'" + avatarUrl + '\'' +
+//                '}';
     }
 
     public String getId() {
