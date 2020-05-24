@@ -24,6 +24,7 @@ public class NetworkController {
     @Resource(name = "networkService")
     private NetworkService networkService;
 
+
     @ApiOperation(value = "人脉更新", notes= "人脉更新", httpMethod = "PUT")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "name", value = "用户名字", paramType = "body", required = true),

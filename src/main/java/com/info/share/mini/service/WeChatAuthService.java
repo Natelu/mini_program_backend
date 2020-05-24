@@ -12,4 +12,7 @@ public interface WeChatAuthService {
 
     // 从微信端获取手机号，并更新数据库 openId, encryptedData, iv
     JSONObject updatePhone(String openId, String encryptedData, String iv);
+
+    // 获取分享二维码
+    JSONObject getORImage(String openId, String scene, String page, int width);
 }

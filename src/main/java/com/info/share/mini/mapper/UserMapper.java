@@ -23,7 +23,7 @@ public interface UserMapper {
     User getUserInfo(@Param("openId") String openId);
     
     // 获取用户简要信息
-    @Select("select id, openid, name, country, province, company, position, avatar_url from user where openid=#{openId} limit 1")
+    @Select("select id, openid, name, tel, we_chat, country, province, company, position, avatar_url from user where openid=#{openId} limit 1")
     UserInfoBasic getUserInfoBasic(@Param("openId") String openId);
 
     @Select("select (id, openId, name, country, province, city, company, position, avatar_url) where openid = #{openId}")

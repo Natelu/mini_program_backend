@@ -106,12 +106,13 @@ public class ArticleController {
     })
 
     @GetMapping(value = "/article/search/{keyword}", produces = {"application/json;charset=UTF-8"})
-    public String searchArticle(@PathVariable("keyword") String keyword,
+    public JSONObject searchArticle(@PathVariable("keyword") String keyword,
                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                 HttpServletResponse response){
         JSONObject res = articleService.searchArticle(keyword, page, pageSize);
-        return JSONObject.toJSONString(res);
+        response.setStatus(res.getIntValue("code"));
+        return res;
     }
 
 }

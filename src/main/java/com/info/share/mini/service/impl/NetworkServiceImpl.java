@@ -167,7 +167,7 @@ public class NetworkServiceImpl implements NetworkService {
         SearchHit[] hits = searchHits.getHits();
         List<ElasticNetworkResult> networks = new LinkedList<>();
         if (hits.length <= 0) {
-            return null;
+            return JSONObject.parseObject(ResultJSON.success(400, "none hit by this keyword.").toSimpleString());
         }
         for (SearchHit hit:hits){
             ElasticNetworkResult tmpNetwork = new ElasticNetworkResult();

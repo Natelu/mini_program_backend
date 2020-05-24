@@ -1,6 +1,8 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.Date;
 
@@ -25,16 +27,17 @@ public class ElasticNetworkResult {
 
     @Override
     public String toString() {
-        return "{" +
-                "id:'" + id + '\'' +
-                ", openid:'" + openid + '\'' +
-                ", company:'" + company + '\'' +
-                ", position:'" + position + '\'' +
-                ", city:'" + city + '\'' +
-                ", province:'" + province + '\'' +
-                ", Abstract:'" + Abstract + '\'' +
-                ", updateTime:'" + updateTime + '\'' +
-                '}';
+        return JSONObject.toJSONString(this, SerializerFeature.WRITE_MAP_NULL_FEATURES);
+//        return "{" +
+//                "id:'" + id + '\'' +
+//                ", openid:'" + openid + '\'' +
+//                ", company:'" + company + '\'' +
+//                ", position:'" + position + '\'' +
+//                ", city:'" + city + '\'' +
+//                ", province:'" + province + '\'' +
+//                ", Abstract:'" + Abstract + '\'' +
+//                ", updateTime:'" + updateTime + '\'' +
+//                '}';
     }
 
     public String getId() {

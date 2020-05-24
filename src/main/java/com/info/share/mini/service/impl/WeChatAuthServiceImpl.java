@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.info.share.mini.utils.wechatAuthUtil;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.UUID;
 
 @Service("weChatAuthService")
@@ -127,6 +128,29 @@ public class WeChatAuthServiceImpl implements WeChatAuthService {
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
             res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toSimpleDataString());
+    }
+
+    @Override
+    public JSONObject getORImage(String openId, String scene, String page, int width){
+        ResultJSON res;
+        JSONObject accessTokenRes = wechatAuthUtil.getAccessToken();
+        if (accessTokenRes.keySet().contains("errcode")){
+            res = ResultJSON.success(404, accessTokenRes.toJSONString());
+            return JSONObject.parseObject(res.toSimpleDataString());
+        }
+        String accessToken = accessTokenRes.getString("access_token");
+        logger.info("accessToken : " + accessToken);
+        try{
+            String qrImg = wechatAuthUtil.getORImage(openId, scene, accessToken, page, width);
+            JSONObject tmp = new JSONObject();
+            tmp.put("QRImage", qrImg);
+            res = ResultJSON.success(tmp);
+        }catch (IOException e){
+            logger.error(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         return JSONObject.parseObject(res.toSimpleDataString());
     }

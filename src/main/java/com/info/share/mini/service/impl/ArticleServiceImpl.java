@@ -200,7 +200,7 @@ public class ArticleServiceImpl implements ArticleService {
         SearchHit[] hits = searchHits.getHits();
         List<ElasticArticleResult> articles = new LinkedList<>();
         if (response.getHits().getHits().length <= 0) {
-            return null;
+            return JSONObject.parseObject(ResultJSON.success(400, "none hit by this keyword.").toSimpleString());
         }
         for (SearchHit hit:hits){
             ElasticArticleResult article = new ElasticArticleResult();
@@ -220,6 +220,8 @@ public class ArticleServiceImpl implements ArticleService {
             article.setId(temp.getString("id"));
             article.setAuthor(temp.getString("author"));
             article.setPublishTime(temp.getString("publish_time"));
+            article.setTheme(temp.getString("theme"));
+            article.setThemeImage(temp.getString("theme_image"));
             articles.add(article);
         }
         ResultJSON res = ResultJSON.success(page, pageSize, (int)totalPage, articles);

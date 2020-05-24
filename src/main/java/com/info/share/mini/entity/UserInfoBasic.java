@@ -27,8 +27,11 @@ public class UserInfoBasic {
 
     private String company;
 
-    //公司职位
+    private String tel;
 
+    private String weChat;
+
+    // 公司职位
     private String position;
 
     private String avatarUrl;
@@ -36,17 +39,22 @@ public class UserInfoBasic {
     @Override
     public String toString() {
         return JSONObject.toJSONString(this, SerializerFeature.WriteMapNullValue);
-//        return "{" +
-//                "id:'" + id + '\'' +
-//                ", openId:'" + openId + '\'' +
-//                ", name:'" + name + '\'' +
-//                ", country:'" + country + '\'' +
-//                ", province:'" + province + '\'' +
-//                ", city:'" + city + '\'' +
-//                ", company:'" + company + '\'' +
-//                ", position:'" + position + '\'' +
-//                ", avatarUrl:'" + avatarUrl + '\'' +
-//                '}';
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String phone) {
+        this.tel = phone;
+    }
+
+    public String getWeChat() {
+        return weChat;
+    }
+
+    public void setWeChat(String weChat) {
+        this.weChat = weChat;
     }
 
     public String getId() {

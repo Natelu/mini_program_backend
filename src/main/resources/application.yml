@@ -29,6 +29,10 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 20
       max-pool-prepared-statement-per-connection-size: 20
+#  mvc:
+#    static-path-pattern: /images/*
+#  resources:
+#    static-locations: ${StaticResource}
 #  data:
 #    elasticsearch:
 #      cluster-name:
@@ -50,9 +54,13 @@ mybatis:
 # https://
 wechat:
   code2SessionUrl: api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
-  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+  accessTokenUrl: api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
   appId: wx3ab7d45aeb09ce37
   appSecret: 73b54c99840affc65387b737a7d9f621
+#  appId: wx98e561afbeeaeac2
+#  appSecret: fb8f612ddd1b8460c29363573b5b8cdb
+  QRImagePath: ${StaticResource}/QRImages/
+  nginxUrl: http://39.100.150.192:9250/static/QRImages/
 
 #debug: true
 pagehelper:
