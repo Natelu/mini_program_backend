@@ -10,6 +10,7 @@ import com.info.share.mini.entity.User;
 import com.info.share.mini.mapper.ArticleMapper;
 import com.info.share.mini.mapper.UserMapper;
 import com.info.share.mini.service.ArticleService;
+import com.info.share.mini.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequest;
@@ -42,6 +43,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource(name = "userMapper")
     private UserMapper userMapper;
+
+    @Resource(name = "userService")
+    private UserService userService;
 
     @Resource(name = "highLevelClient")
     private RestHighLevelClient esClient;
@@ -120,13 +124,13 @@ public class ArticleServiceImpl implements ArticleService {
                 res.put("status", 200);
                 res.put("message", "article has been inserted successfully!");
             }else{
-                res.put("status", 201);
+                res.put("status", 200);
                 res.put("message", "article has already existed");
             }
         }catch (Exception e){
             logger.info(e.getClass());
             res.put("message", e.getLocalizedMessage());
-            res.put("status", 400);
+            res.put("status", 500);
         }
         return res;
     }
@@ -141,8 +145,7 @@ public class ArticleServiceImpl implements ArticleService {
             article = articleMapper.fetchArticleDetail(articleId);
             logger.info(article.getPublishTime());
             user = userMapper.getUserInfo(openId);
-//            User user = users.get(0);
-            if (user.getRank() == 0){ //普通用户，不显示全部内容;
+            if(!userService.checkVip(openId)){
                 res.put("isVip", false);
                 article.setContent("");
             }else{
@@ -154,7 +157,7 @@ public class ArticleServiceImpl implements ArticleService {
             logger.info("User " + openId + " successfully get the article  " + article.getTitle() + ".");
         }catch (Exception e){
             logger.info(e.getLocalizedMessage());
-            res.put("status", 403);
+            res.put("status", 500);
             res.put("message", e.getLocalizedMessage());
         }
         return res;
@@ -200,7 +203,7 @@ public class ArticleServiceImpl implements ArticleService {
         SearchHit[] hits = searchHits.getHits();
         List<ElasticArticleResult> articles = new LinkedList<>();
         if (response.getHits().getHits().length <= 0) {
-            return JSONObject.parseObject(ResultJSON.success(400, "none hit by this keyword.").toSimpleString());
+            return JSONObject.parseObject(ResultJSON.success(202, "none hit by this keyword.").toSimpleString());
         }
         for (SearchHit hit:hits){
             ElasticArticleResult article = new ElasticArticleResult();

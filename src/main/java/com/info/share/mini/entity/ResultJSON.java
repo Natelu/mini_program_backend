@@ -29,7 +29,10 @@ public class ResultJSON {
         ResultJSON result = new ResultJSON(code, msg, null);
         return result;
     }
-
+    // 自定义成功状态
+    public static ResultJSON success(String msg){
+        return ResultJSON.success(200, msg);
+    }
     // 成功返回<有返回数据>
     public static ResultJSON success(Object responseData) {
         ResultJSON result = new ResultJSON(200, "操作成功", responseData);
@@ -50,6 +53,11 @@ public class ResultJSON {
             result.setMsg("操作失败");
         }
         return result;
+    }
+
+    public static ResultJSON err(int code, Object responseData){
+        ResultJSON resultJSON = new ResultJSON(code, "操作失败", responseData);
+        return resultJSON;
     }
 
     // 自定义返回状态及返回数据

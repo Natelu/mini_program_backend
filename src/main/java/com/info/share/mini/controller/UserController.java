@@ -50,23 +50,21 @@ public class UserController {
     @GetMapping(value = "/user/checkVip", produces = {"application/json;charset=UTF-8"})
     public JSONObject checkVip(@RequestParam("openid") String openId, HttpServletResponse response){
 
-        JSONObject res = new JSONObject();
-        boolean isVip = false;
-        int code = 400;
-        if(userService.checkExists(openId)) {
-            if (userService.checkVip(openId)) {
-                isVip = true;
-                code = 200;
-            }
-            res.put("isVip", isVip);
-            res.put("code", code);
-        }else{
-            code = 404;
-            String msg = "Sorry, we have none this user.";
-            res.put("code", code);
-            res.put("msg", msg);
-            res.put("isVip", isVip);
-        }
+        JSONObject res = userService.checkVipJson(openId);
+
+//        boolean isVip = false;
+//        int code = 200;
+//        if(userService.checkExists(openId)) {
+//            if (userService.checkVip(openId)) {
+//                isVip = true;
+//            }
+//            res.put("isVip", isVip);
+//        }else{
+//            String msg = "Sorry, we have none this user.";
+//            res.put("msg", msg);
+//            res.put("isVip", isVip);
+//        }
+//        res.put("code", code);
         response.setStatus(res.getIntValue("code"));
         return res;
     }
@@ -87,7 +85,7 @@ public class UserController {
         if (userService.checkExists(openId)){
             res = userService.invitedVipUsersByOpenId(openId);
         }else { //用户不存在
-            res.put("code", 202);
+            res.put("code", 200);
             res.put("msg", "we have none this user.");
         }
         response.setStatus(res.getIntValue("code"));

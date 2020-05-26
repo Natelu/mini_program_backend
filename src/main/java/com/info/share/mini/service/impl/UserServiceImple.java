@@ -1,5 +1,6 @@
 package com.info.share.mini.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.info.share.mini.entity.Network;
 import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.UserInfoBasic;
@@ -114,6 +115,7 @@ public class UserServiceImple implements UserService {
         }
         //生成空人脉信息
         try {
+            logger.info("开始生成空人脉信息 " + id + openId);
             JSONObject tmpRes = networkService.createNull(id, openId, 0); //普通用户weight都为0；
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
@@ -161,14 +163,39 @@ public class UserServiceImple implements UserService {
     }
 
     @Override
+    public JSONObject checkExistsJson(String openId) {
+        JSONObject res = new JSONObject();
+        boolean isExist = false;
+        if(checkExists(openId)){
+            isExist = true;
+        }
+        res.put("code", 200);
+        res.put("isExist", isExist);
+        return res;
+    }
+
+    @Override
+    public JSONObject checkVipJson(String openId) {
+        JSONObject existRes = checkExistsJson(openId);
+        if(existRes.getBooleanValue("isExist")){
+            JSONObject res = new JSONObject();
+            res.put("code", 200);
+            res.put("isVip", checkVip(openId));
+            return res;
+        }else{
+            return JSONObject.parseObject(ResultJSON.success(400, "无此用户.").toSimpleString());
+        }
+    }
+
+    @Override
     public JSONObject update2Vip(String openid){
         ResultJSON res;
         if(!checkExists(openid)){
-            res = ResultJSON.success(401, "sorry, we have none this user.");
+            res = ResultJSON.success("sorry, we have none this user.");
             return JSONObject.parseObject(res.toSimpleString());
         }
         if(checkVip(openid)){
-            res = ResultJSON.success(402, "sorry, the target user has already been vip.");
+            res = ResultJSON.success("sorry, the target user has already been vip.");
             return JSONObject.parseObject(res.toSimpleString());
         }
         try {

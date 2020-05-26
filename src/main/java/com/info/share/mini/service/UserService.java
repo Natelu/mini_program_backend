@@ -20,6 +20,9 @@ public interface UserService {
 
     boolean checkExists(String openId);
 
+    JSONObject checkExistsJson(String openId);
+
+    JSONObject checkVipJson(String openId);
     // 升级用户为vip
     JSONObject update2Vip(String openId);
 

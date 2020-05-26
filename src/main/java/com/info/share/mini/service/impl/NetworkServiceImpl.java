@@ -58,7 +58,7 @@ public class NetworkServiceImpl implements NetworkService {
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
             if (e.getLocalizedMessage().contains("Duplicate entry")){
-                res = ResultJSON.success(401, " already has this empty network.");
+                res = ResultJSON.success(" already has this empty network.");
             }else{
                 res = ResultJSON.error(e.getLocalizedMessage());
                 logger.error(openid + " create network create failed.");
@@ -71,21 +71,10 @@ public class NetworkServiceImpl implements NetworkService {
     public JSONObject updateNetwork(User userInfo, Network networkInfo){
         ResultJSON res ;
         String openId = userInfo.getOpenid();
-        // 判断用户是否存在
-        if (!userService.checkExists(openId)){
-            res = ResultJSON.success(203, "sorry, we have none this user.");
-            return JSONObject.parseObject(res.toSimpleString());
-        }
-        // 判断用户是否会员；
-        if(!userService.checkVip(openId)){
-            res = ResultJSON.success(203,"sorry, this function can only used by vip person.");
-            return JSONObject.parseObject(res.toSimpleString());
-        }
-        // 更新用户信息
         try {
             userMapper.updateUserInfo(userInfo.getOpenid(), userInfo.getName(), userInfo.getCompany(),
                     userInfo.getCountry(), userInfo.getProvince(),
-                    userInfo.getCity(), userInfo.getTel(), userInfo.getWeChat(), userInfo.isShowNumber());
+                    userInfo.getCity(), userInfo.getTel(), userInfo.getWeChat(), userInfo.isShowNumber(), userInfo.getPosition());
             logger.info(userInfo.getName() + " " + userInfo.getOpenid() + " get userinfo update sucessfully.");
         }catch (Exception e){
             res = ResultJSON.error("failed to update user info, for more detail " + e.getLocalizedMessage());
@@ -123,7 +112,7 @@ public class NetworkServiceImpl implements NetworkService {
                 tmp.put("userInfo", userInfo);
                 networksWithUserInfo.add(tmp);
             }
-            res = ResultJSON.success(page, totalPage, pageSize, networksWithUserInfo);
+            res = ResultJSON.success(page, pageSize, totalPage, networksWithUserInfo);
         }catch (Exception e){
             logger.info(e.getLocalizedMessage());
             res = ResultJSON.error(e.getLocalizedMessage());
@@ -135,7 +124,7 @@ public class NetworkServiceImpl implements NetworkService {
     public JSONObject getNetworkDetail(String openid, String id){
         ResultJSON res ;
         if (!userService.checkExists(openid)){
-            res = ResultJSON.success(404, "we have none this user!");
+            res = ResultJSON.success(200, "we have none this user!");
             return JSONObject.parseObject(res.toSimpleString());
         }
         try{
@@ -167,7 +156,7 @@ public class NetworkServiceImpl implements NetworkService {
         SearchHit[] hits = searchHits.getHits();
         List<ElasticNetworkResult> networks = new LinkedList<>();
         if (hits.length <= 0) {
-            return JSONObject.parseObject(ResultJSON.success(400, "none hit by this keyword.").toSimpleString());
+            return JSONObject.parseObject(ResultJSON.success(200, "none hit by this keyword.").toSimpleString());
         }
         for (SearchHit hit:hits){
             ElasticNetworkResult tmpNetwork = new ElasticNetworkResult();
@@ -187,6 +176,8 @@ public class NetworkServiceImpl implements NetworkService {
             tmpNetwork.setProvince(temp.getString("province"));
             tmpNetwork.setCity(temp.getString("city"));
             tmpNetwork.setUpdateTime(temp.getString("update_time"));
+            tmpNetwork.setName(temp.getString("name"));
+            tmpNetwork.setAvatarUrl(temp.getString("avatar_url"));
             networks.add(tmpNetwork);
         }
         ResultJSON res = ResultJSON.success(page, pageSize, (int)totalPage, networks);

@@ -11,6 +11,10 @@ public class ElasticNetworkResult {
     // 人脉id
     private String id;
 
+    private String name;
+
+    private String avatarUrl;
+
     private String openid;
 
     private String company;
@@ -28,16 +32,22 @@ public class ElasticNetworkResult {
     @Override
     public String toString() {
         return JSONObject.toJSONString(this, SerializerFeature.WRITE_MAP_NULL_FEATURES);
-//        return "{" +
-//                "id:'" + id + '\'' +
-//                ", openid:'" + openid + '\'' +
-//                ", company:'" + company + '\'' +
-//                ", position:'" + position + '\'' +
-//                ", city:'" + city + '\'' +
-//                ", province:'" + province + '\'' +
-//                ", Abstract:'" + Abstract + '\'' +
-//                ", updateTime:'" + updateTime + '\'' +
-//                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getId() {

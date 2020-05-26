@@ -1,6 +1,8 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.Date;
 
@@ -109,17 +111,6 @@ public class Article {
 
     @Override
     public String toString() {
-        return "{" +
-                "id:'" + id + '\'' +
-                ", author:'" + author + '\'' +
-                ", title:'" + title + '\'' +
-                ", content:'" + content + '\'' +
-                ", contentPreview:'" + contentPreview + '\'' +
-                ", theme:'" + theme + '\'' +
-                ", themeImage:'" + themeImage + '\'' +
-                ", tag:'" + tag + '\'' +
-                ", readCont:" + readCount +
-                ", publishTime:" + publishTime +
-                '}';
+        return JSONObject.toJSONString(this, SerializerFeature.WRITE_MAP_NULL_FEATURES);
     }
 }

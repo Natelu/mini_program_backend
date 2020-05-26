@@ -57,8 +57,6 @@ wechat:
   accessTokenUrl: api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
   appId: wx3ab7d45aeb09ce37
   appSecret: 73b54c99840affc65387b737a7d9f621
-#  appId: wx98e561afbeeaeac2
-#  appSecret: fb8f612ddd1b8460c29363573b5b8cdb
   QRImagePath: ${StaticResource}/QRImages/
   nginxUrl: http://39.100.150.192:9250/static/QRImages/
 

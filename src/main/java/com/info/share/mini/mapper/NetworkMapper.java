@@ -11,8 +11,8 @@ import java.util.List;
 @Service(value = "networkMapper")
 public interface NetworkMapper {
 
-    // 人脉列表（阅读量降序）
-    @Select("select * from networks order by read_count desc")
+    // 人脉列表（阅读量降序, 仅显示会员用户）
+    @Select("select * from networks where openid in (select openid from user where user.`rank`=1) order by read_count desc")
     List<Network> listNetwork();
 
     @Insert("insert into networks(id, openid, abstract, demand, resource) values(#{id}, #{openid}, #{Abstract}," +

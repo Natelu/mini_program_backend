@@ -33,9 +33,9 @@ public interface UserMapper {
     int getUserRank(String openId);
 
     @Update("update user set name=#{name}, company=#{company}, country=#{country},province=#{province}, city=#{city}, " +
-            "tel=#{tel}, we_chat=#{weChat}, show_number=#{showNumber} where openid=#{openId}")
+            "tel=#{tel}, we_chat=#{weChat}, show_number=#{showNumber}, position=#{position} where openid=#{openId}")
     void updateUserInfo(String openId, String name, String company, String country, String province, String city, String tel, String weChat,
-                        boolean showNumber);
+                        boolean showNumber, String position);
 
     // 将用户升级为vip
     @Update("update user set user.rank=1 where openid=#{openId}")

@@ -5,6 +5,7 @@ import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.WeChatAuthInfo;
 import com.info.share.mini.mapper.UserMapper;
 import com.info.share.mini.mapper.WeChatMapper;
+import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
 import com.info.share.mini.service.WeChatAuthService;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +33,8 @@ public class WeChatAuthServiceImpl implements WeChatAuthService {
     @Resource(name = "userMapper")
     private UserMapper userMapper;
 
+    @Resource(name = "networkService")
+    private NetworkService networkService;
     @Override
     public JSONObject checkUser(String code){
         logger.info("request code is " + code);
@@ -40,9 +43,6 @@ public class WeChatAuthServiceImpl implements WeChatAuthService {
         ResultJSON result;
         JSONObject res = new JSONObject();
         if (sessionRes.getIntValue("errcode") != 0){
-            sessionRes.put("code", 400);
-//            logger.error();
-            ResultJSON tmp = ResultJSON.error(res.getString("errmsg"));
             return sessionRes;
         }
         try{
@@ -98,6 +98,8 @@ public class WeChatAuthServiceImpl implements WeChatAuthService {
                 id = id.replace("-", "");
                 userMapper.createUserByWeChatInfo(id, openId, nickName, gender, city, province, country, avatarUrl,
                         unionId, invitedBy);
+                // 生成空人脉信息
+                JSONObject tmp = networkService.createNull(id, openId, 0);
                 res = ResultJSON.success(200, "registed successfully.");
             }else{
                 res = ResultJSON.success(403, "this user has already been registed.");
@@ -137,16 +139,18 @@ public class WeChatAuthServiceImpl implements WeChatAuthService {
         ResultJSON res;
         JSONObject accessTokenRes = wechatAuthUtil.getAccessToken();
         if (accessTokenRes.keySet().contains("errcode")){
-            res = ResultJSON.success(404, accessTokenRes.toJSONString());
+            res = ResultJSON.err(500, accessTokenRes);
             return JSONObject.parseObject(res.toSimpleDataString());
         }
         String accessToken = accessTokenRes.getString("access_token");
         logger.info("accessToken : " + accessToken);
         try{
-            String qrImg = wechatAuthUtil.getORImage(openId, scene, accessToken, page, width);
-            JSONObject tmp = new JSONObject();
-            tmp.put("QRImage", qrImg);
-            res = ResultJSON.success(tmp);
+            JSONObject qrImg = wechatAuthUtil.getORImage(openId, scene, accessToken, page, width);
+            if (qrImg.keySet().contains("errcode")){
+                res = ResultJSON.err(500, qrImg);
+            }else{
+                res = ResultJSON.success(qrImg);
+            }
         }catch (IOException e){
             logger.error(e.getLocalizedMessage());
             res = ResultJSON.error(e.getLocalizedMessage());
