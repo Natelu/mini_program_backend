@@ -35,7 +35,15 @@ public class UserController {
         response.setStatus(userRes.getInteger("code"));
         return userRes;
     }
-
+    @ApiOperation(value = "删除用户", notes= "删除用户", httpMethod = "DELETE")
+    @DeleteMapping(value = "/user/{open_id}/delete", produces = {"application/json;charset=UTF-8"})
+    public JSONObject deleteUser(@PathVariable("open_id") String openId, HttpServletRequest request,
+                                HttpServletResponse response){
+        logger.info("request url is : " + request.getRequestURL());
+        JSONObject userRes = userService.deleteUser(openId);
+        response.setStatus(userRes.getInteger("code"));
+        return userRes;
+    }
     @ApiOperation(value = "用户注册", notes= "用户注册", httpMethod = "GET")
     @GetMapping(value = "/user/register", produces = {"application/json;charset=UTF-8"})
     public String register(@RequestParam("openid") String openid,

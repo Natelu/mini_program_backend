@@ -15,6 +15,9 @@ public interface NetworkMapper {
     @Select("select * from networks where openid in (select openid from user where user.`rank`=1) order by read_count desc")
     List<Network> listNetwork();
 
+    @Delete("delete from networks where openid=#{openId}")
+    void deleteNetwork(String openId);
+
     @Insert("insert into networks(id, openid, abstract, demand, resource) values(#{id}, #{openid}, #{Abstract}," +
             "#{demand}, #{resource})")
     void inserNetwork(@Param("id") String id, @Param("openId") String openId, @Param("Abstract") String Abstract,

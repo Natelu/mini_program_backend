@@ -15,6 +15,9 @@ public interface UserMapper {
             "#{id}, #{openId}, #{name}, now(), #{tel})")
     void createUser(@Param("id") String id, @Param("openId") String openId, @Param("name") String name, @Param("tel") String tel);
 
+    @Delete("delete from user where openid=#{openId}")
+    void deleteUser(String openId);
+
     @Select("select * from user where id=#{id}")
     User selectUserById(@Param("id") String id);
 

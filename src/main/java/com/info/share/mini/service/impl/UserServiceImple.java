@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.info.share.mini.entity.Network;
 import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.UserInfoBasic;
+import com.info.share.mini.mapper.NetworkMapper;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
 import com.info.share.mini.entity.User;
@@ -28,6 +29,9 @@ public class UserServiceImple implements UserService {
     @Resource(name = "userMapper")
     private UserMapper userMapper;
 
+    @Resource(name = "networkMapper")
+    private NetworkMapper networkMapper;
+
     @Resource(name = "networkService")
     private NetworkService networkService;
 
@@ -48,6 +52,18 @@ public class UserServiceImple implements UserService {
         }
         logger.info(resUser.toSimpleDataString());
         return JSONObject.parseObject(resUser.toSimpleDataString());
+    }
+
+    @Override public JSONObject deleteUser(String openId) {
+        ResultJSON res;
+        try{
+            userMapper.deleteUser(openId);
+            networkMapper.deleteNetwork(openId);
+            res = ResultJSON.success("delete successfully.");
+        }catch (Exception e){
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toSimpleString());
     }
 
     @Override
