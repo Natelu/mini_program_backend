@@ -1,9 +1,9 @@
 server:
-  port: 443
-  ssl:
-    key-store: 3984126_www.qsssss.com.pfx
-    key-store-type: PKCS12
-    key-store-password: wjv1atcY
+  port: 8090
+#  ssl:
+#    key-store: 3984126_www.qsssss.com.pfx
+#    key-store-type: PKCS12
+#    key-store-password: wjv1atcY
 #spring.datasource.du
 
 spring:
@@ -61,7 +61,7 @@ wechat:
   appId: wx3ab7d45aeb09ce37
   appSecret: 73b54c99840affc65387b737a7d9f621
   QRImagePath: ${StaticResource}/QRImages/
-  nginxUrl: http://39.100.150.192:9250/static/QRImages/
+  nginxUrl: https://www.qsssss.com/static/QRImages/
 
 #debug: true
 pagehelper:
