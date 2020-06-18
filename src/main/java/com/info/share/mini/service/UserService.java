@@ -31,4 +31,5 @@ public interface UserService {
 
     JSONObject invitedVipUsersByOpenId(String openId);
 
+    JSONObject getUserList(int page, int pageNumber);
 }

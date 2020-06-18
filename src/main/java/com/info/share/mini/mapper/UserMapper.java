@@ -18,6 +18,9 @@ public interface UserMapper {
     @Delete("delete from user where openid=#{openId}")
     void deleteUser(String openId);
 
+    @Select("select * from user where openid is not null")
+    List<User> fetchAllUser();
+
     @Select("select * from user where id=#{id}")
     User selectUserById(@Param("id") String id);
 

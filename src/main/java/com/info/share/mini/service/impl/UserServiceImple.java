@@ -1,13 +1,12 @@
 package com.info.share.mini.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.info.share.mini.entity.Network;
-import com.info.share.mini.entity.ResultJSON;
-import com.info.share.mini.entity.UserInfoBasic;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.info.share.mini.entity.*;
 import com.info.share.mini.mapper.NetworkMapper;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
-import com.info.share.mini.entity.User;
 import com.info.share.mini.mapper.UserMapper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -163,6 +162,7 @@ public class UserServiceImple implements UserService {
         logger.info(res.toSimpleDataString());
         return JSONObject.parseObject(res.toSimpleDataString());
     }
+
     @Override
     public boolean checkExists(String openId){
         User user = null;
@@ -247,5 +247,24 @@ public class UserServiceImple implements UserService {
         }
         logger.info(res.toSimpleDataString());
         return JSONObject.parseObject(res.toSimpleString());
+    }
+
+    @Override
+    public JSONObject getUserList(int page, int pageSize){
+        ResultJSON res = null;
+        List<User> list = null;
+        try{
+            PageHelper.startPage(page, pageSize);
+            list = userMapper.fetchAllUser();
+            PageInfo pageInfo = new PageInfo(list);
+            int totalPage = pageInfo.getPages();
+            JSONObject temp = new JSONObject();
+            temp.put("users", list);
+            res = ResultJSON.success(page, pageSize, totalPage, temp);
+        }catch (Exception e){
+            logger.info(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toString());
     }
 }

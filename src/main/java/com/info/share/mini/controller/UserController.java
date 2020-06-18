@@ -25,6 +25,14 @@ public class UserController {
     @Resource(name = "userService")
     private UserService userService;
 
+    @GetMapping(value = "/user/list", produces = {"application/json;charset=UTF-8"})
+    public JSONObject fetchUserList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                    HttpServletResponse response){
+        JSONObject res = userService.getUserList(page, pageSize);
+        response.setStatus(res.getIntValue("code"));
+        return res;
+    }
     @ApiOperation(value = "获取用户信息", notes= "获取用户信息", httpMethod = "GET")
     @GetMapping(value = "/user/{open_id}/info", produces = {"application/json;charset=UTF-8"})
     public JSONObject fetchUser(@PathVariable("open_id") String openId, HttpServletRequest request,
