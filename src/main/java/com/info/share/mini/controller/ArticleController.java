@@ -62,7 +62,7 @@ public class ArticleController {
     }
 
     @PostMapping(value = "/article/upload", produces = {"application/json;charset=UTF-8"})
-    public String uploadArticle(@RequestBody JSONObject body,HttpServletRequest request, HttpServletResponse response){
+    public String uploadArticle(@RequestBody JSONObject body, HttpServletRequest request, HttpServletResponse response){
         String author = body.getString("author");
         logger.info(author);
         String title = body.getString("title");

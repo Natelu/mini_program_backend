@@ -46,8 +46,6 @@ spring:
 #          endpoints: http://39.100.150.192:9200
 
 
-
-
 mybatis:
   configuration:
     type-aliases-package: com.info.share.mini.entity
