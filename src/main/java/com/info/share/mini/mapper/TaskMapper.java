@@ -27,4 +27,11 @@ public interface TaskMapper {
 
     @Select("select id, name, service_wechat, service_wechat_code, introduce, money, publish_time, task_owner from task where name=#{name}")
     Task getTaskDetailByName(String name);
+
+    @Insert("insert into do_task (id, user_id, task_id, status, create_time) values(#{id}, #{userId}, #{taskId}," +
+            " #{status}, now())")
+    void createDoTask(String id, String userId, String taskId, String status);
+
+    @Update("update do_task set status = #{status} where user_id=#{userId} and task_id=#{taskId}")
+    void updateUserTask(String userId, String taskId, String status);
 }

@@ -19,4 +19,10 @@ public interface TaskService {
 
     // 任务详情 (by name)
     JSONObject getTaskDetailByName(String name);
+
+    // 任务领取
+    JSONObject bindTaskWithUser(String userId, String taskId);
+
+    // 任务完成
+    JSONObject doneTaskByUser(String userId, String taskId);
 }
