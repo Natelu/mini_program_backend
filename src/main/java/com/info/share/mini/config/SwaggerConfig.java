@@ -22,7 +22,8 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage(""))
                 .paths(PathSelectors.any())
                 .build()
-                .host("www.qsssss.com");
+//                .host("www.qsssss.com")
+                ;
     }
 
     private ApiInfo apiInfo(){

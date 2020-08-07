@@ -3,10 +3,7 @@ package com.info.share.mini.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.info.share.mini.entity.ElasticArticleResult;
-import com.info.share.mini.entity.ElasticTaskResult;
-import com.info.share.mini.entity.ResultJSON;
-import com.info.share.mini.entity.Task;
+import com.info.share.mini.entity.*;
 import com.info.share.mini.mapper.TaskMapper;
 import com.info.share.mini.service.TaskService;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -164,4 +162,61 @@ public class TaskServiceImpl implements TaskService {
         }
         return JSONObject.parseObject(res.toSimpleDataString());
     }
+
+    // 领取任务
+    @Override public JSONObject bindTaskWithUser(String userId, String taskId) {
+        ResultJSON res;
+        try {
+            TaskDo taskDo = taskMapper.getDoTaskByUser(userId, taskId);
+            if (taskDo!=null){
+                res = ResultJSON.success("用户已领取该任务");
+            }else{
+                String id = UUID.randomUUID().toString();
+                id = id.replace("-", "");
+                taskMapper.createDoTask(id, userId, taskId, TaskStatus.doing.name());
+                res = ResultJSON.success("任务领取成功");
+            }
+        }catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toSimpleString());
+    }
+
+    // 完成任务
+    @Override public JSONObject doneTaskByUser(String userId, String taskId) {
+        ResultJSON res;
+        try {
+            TaskDo taskDo = taskMapper.getDoTaskByUser(userId, taskId);
+            if (taskDo == null){
+                res = ResultJSON.error("用户未领取该任务");
+            }else{
+                taskMapper.updateUserTask(userId, taskId, TaskStatus.done.name());
+                res = ResultJSON.success("任务已完成");
+            }
+        }catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toSimpleString());
+    }
+
+    @Override public JSONObject getUserDoTasks(String userId, int page, int pageSize) {
+        ResultJSON res;
+        List<TaskDo> taskDos = new ArrayList<>();
+        try{
+            PageHelper.startPage(page, pageSize);
+            taskDos = taskMapper.getDoTasksByUser(userId);
+            PageInfo<TaskDo> pageInfo = new PageInfo<>(taskDos);
+            int totalPage = pageInfo.getPages();
+            res = ResultJSON.success(page, pageSize, totalPage, taskDos);
+        }catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toString());
+    }
+}
+enum TaskStatus {
+    doing, done
 }

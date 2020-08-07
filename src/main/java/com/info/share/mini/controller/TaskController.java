@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.Task;
 import com.info.share.mini.service.TaskService;
+import com.info.share.mini.service.UserService;
 import com.info.share.mini.utils.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,9 @@ public class TaskController {
     @Resource(name = "taskService")
     private TaskService taskService;
 
+    @Resource(name = "userService")
+    private UserService userService;
+
     @ApiOperation(value = "获取任务列表", notes= "获取任务列表，默认按时间倒序排列", httpMethod = "GET")
     @GetMapping(value = "/list", produces = {"application/json;charset=UTF-8"})
     public JSONObject getTaskList(@RequestParam(value = "pageNumber" , defaultValue = "1") int page,
@@ -35,6 +39,7 @@ public class TaskController {
         return result;
     }
 
+    @ApiOperation(value = "任务上传", httpMethod = "POST")
     @PostMapping(value = "/upload", produces = {"application/json;charset=UTF-8"})
     public JSONObject uploadTask(@RequestParam(value = "codeImage")MultipartFile file, @RequestParam(value = "name") String name,
                                  @RequestParam(value = "wechat") String wechat, @RequestParam(value = "introduce") String introduce,
@@ -49,14 +54,13 @@ public class TaskController {
             response.setStatus(400);
             return JSONObject.parseObject(ResultJSON.error("图片上传失败！").toSimpleString());
         }
-        // String name, String wechat, String wechatCode, String introduce, float money
-
         JSONObject res = taskService.uploadTask(name, wechat, uploadImageRes.getString("fileUrl"), introduce, money, taskOwner);
         response.setStatus(res.getIntValue("code"));
         return res;
     }
 
     // 搜索任务
+    @ApiOperation(value = "任务搜索", notes= "根据关键字搜索任务", httpMethod = "GET")
     @GetMapping(value = "/search/{keyword}", produces = {"application/json;charset=UTF-8"})
     public JSONObject searchTask(@PathVariable("keyword") String keyword,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
@@ -68,6 +72,7 @@ public class TaskController {
     }
 
     // 任务详情
+    @ApiOperation(value = "获取任务详情，通过id", httpMethod = "GET")
     @GetMapping(value = "/detail/byId/{id}", produces = {"application/json;charset=UTF-8"})
     public JSONObject getTaskDetail(@PathVariable("id") String id,
                                  HttpServletResponse response){
@@ -77,10 +82,39 @@ public class TaskController {
     }
 
     // 任务详情
+    @ApiOperation(value = "获取任务详情，通过任务name", httpMethod = "GET")
     @GetMapping(value = "/detail/byName/{name}", produces = {"application/json;charset=UTF-8"})
     public JSONObject getTaskDetailByName(@PathVariable("name") String name,
                                     HttpServletResponse response){
         JSONObject res = taskService.getTaskDetailByName(name);
+        response.setStatus(res.getIntValue("code"));
+        return res;
+    }
+
+    @ApiOperation(value = "任务领取", notes= "任务领取，普通用户也可以领取", httpMethod = "GET")
+    @GetMapping(value = "/doing/{accountId}/{taskId}", produces = {"application/json;charset=UTF-8"})
+    public JSONObject doingTask(@PathVariable("accountId") String accountId, @PathVariable("taskId") String taskId,
+                                HttpServletResponse response){
+        JSONObject res = taskService.bindTaskWithUser(accountId, taskId);
+        response.setStatus(res.getIntValue("code"));
+        return res;
+    }
+
+    @ApiOperation(value = "用户已领取任务列表", notes= "用户领取的所有任务列表", httpMethod = "GET")
+    @GetMapping(value = "/doing/tasks/{accountId}/", produces = {"application/json;charset=UTF-8"})
+    public JSONObject doingTasksList(@PathVariable("accountId") String accountId, @RequestParam(value = "pageNumber" , defaultValue = "1") int page,
+                                     @RequestParam(value = "pageSize" , defaultValue = "10") int pageSize,
+                                     HttpServletResponse response){
+        JSONObject res = taskService.getUserDoTasks(accountId, page, pageSize);
+        response.setStatus(res.getIntValue("code"));
+        return res;
+    }
+
+    @ApiOperation(value = "任务完成", notes= "完成任务", httpMethod = "GET")
+    @GetMapping(value = "/done/{accountId}/{taskId}", produces = {"application/json;charset=UTF-8"})
+    public JSONObject doneTask(@PathVariable("accountId") String accountId, @PathVariable("taskId") String taskId,
+                                HttpServletResponse response){
+        JSONObject res = taskService.doneTaskByUser(accountId, taskId);
         response.setStatus(res.getIntValue("code"));
         return res;
     }

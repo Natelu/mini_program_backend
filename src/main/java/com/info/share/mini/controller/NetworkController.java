@@ -7,8 +7,6 @@ import com.info.share.mini.entity.User;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,9 +1,11 @@
 package com.info.share.mini.mapper;
 
 import com.info.share.mini.entity.Task;
+import com.info.share.mini.entity.TaskDo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,4 +40,12 @@ public interface TaskMapper {
     // 更改用户任务状态
     @Update("update do_task set status = #{status} where user_id=#{userId} and task_id=#{taskId}")
     void updateUserTask(String userId, String taskId, String status);
+
+    // 查询任务领取情况
+    @Select("select * from do_task where user_id = #{userId} and task_id = #{taskId}")
+    TaskDo getDoTaskByUser(String userId, String taskId);
+
+    // 查询用户领取任务列表
+    @Select("select * from do_task where user_id = #{userId}")
+    List<TaskDo> getDoTasksByUser(String userId);
 }

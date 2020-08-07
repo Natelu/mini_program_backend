@@ -25,4 +25,7 @@ public interface TaskService {
 
     // 任务完成
     JSONObject doneTaskByUser(String userId, String taskId);
+
+    // 用户领取任务列表
+    JSONObject getUserDoTasks(String userId, int page, int pageSize);
 }
