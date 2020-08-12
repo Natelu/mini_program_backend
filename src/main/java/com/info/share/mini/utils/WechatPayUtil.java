@@ -1,9 +1,13 @@
 package com.info.share.mini.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.WxPreOrder;
 import net.bytebuddy.utility.RandomString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.util.fst.Util;
 import org.bouncycastle.jcajce.provider.digest.MD5;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +21,8 @@ import java.util.*;
 
 @Component
 public class WechatPayUtil {
+
+    private static final Logger logger = LogManager.getLogger(WechatPayUtil.class);
 
     private static String buildOrderUrl;
     @Value("${wechat.buildOrder}")
@@ -37,12 +43,15 @@ public class WechatPayUtil {
     }
 
     @Value("${wechat.mchId}")
-    private String mchId;
+    private static String mchId;
     public void setMchId(String mchId1){
         appId= mchId1;
     }
 
-    public String genSign(WxPreOrder preOrder){
+    @Value("${wechat.notifyUrl}")
+    private String notifyUrl;
+
+    public static String genSign(WxPreOrder preOrder){
         // 参数排序，转字符串，形如 appid=wxd930ea5d5a258f4f&body=test
         preOrder.setAppid(appId);
         preOrder.setMch_id(mchId);
@@ -63,9 +72,25 @@ public class WechatPayUtil {
         return sign;
     }
 
-    public JSONObject genPreOrder(WxPreOrder wxPreOrder){
+    public static JSONObject genPreOrder(WxPreOrder wxPreOrder) throws Exception{
         wxPreOrder.setSign(genSign(wxPreOrder));
+        String requestData = WechatPayXmlUtil.buildXmlString(wxPreOrder);
+        String url = "https://" + buildOrderUrl;
+        JSONObject response = HttpUtil.requestXmlData(url, requestData, 10*1000, 10*1000);
+        JSONObject result = new JSONObject();
         // TODO 请求获取订单
-        return null;
+        String returnCode = response.getString("result_code");
+        if (!WechatPayConstants.SUCCESS.equals(returnCode)){
+            logger.error("获取支付订单失败 resultCode="+returnCode);
+            result = JSONObject.parseObject(ResultJSON.error("获取支付订单失败").toSimpleString());
+        }
+        String prepay_id = response.getString("prepay_id");
+        if (prepay_id == null) {
+            logger.error("获取支付订单prepay_id失败{} prepay_id="+prepay_id);
+            result = JSONObject.parseObject(ResultJSON.error("获取支付订单prepay_id失败").toSimpleString());
+        }
+        // 处理订单库逻辑，将订单状态置为doing 状态
+        result.put("response", response);
+        return result;
     }
 }

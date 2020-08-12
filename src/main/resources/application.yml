@@ -60,6 +60,7 @@ wechat:
   appSecret: 73b54c99840affc65387b737a7d9f621
   appKey: xxxxx
   mchId: xxxx
+  notifyUrl: xxx
   buildOrder: api.mch.weixin.qq.com/pay/unifiedorder
   QRImagePath: ${StaticResource}/QRImages/
   nginxUrl: https://www.qsssss.com/static/QRImages/

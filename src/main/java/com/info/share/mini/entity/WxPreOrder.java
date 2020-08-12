@@ -10,12 +10,22 @@ public class WxPreOrder {
     private String body; // 产品描述
     private String detail; //产品详情
     private String out_trade_no; // out_trade_no 商户订单号
-    private String total_fee; // 单位为分 INT
+    private int total_fee; // 单位为分 INT
     private String spbill_create_ip; // 调用微信支付API的机器IP
     private String time_start; //交易发起时间
     private String notify_url; //异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
     private String openid;
     private String trade_type; // 小程序取值如下：JSAPI
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    private String userId;
 
     private String product_id; // 商品id
 
@@ -83,11 +93,11 @@ public class WxPreOrder {
         this.out_trade_no = out_trade_no;
     }
 
-    public String getTotal_fee() {
+    public int getTotal_fee() {
         return total_fee;
     }
 
-    public void setTotal_fee(String total_fee) {
+    public void setTotal_fee(int total_fee) {
         this.total_fee = total_fee;
     }
 
