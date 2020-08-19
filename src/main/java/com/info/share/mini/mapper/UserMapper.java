@@ -51,6 +51,9 @@ public interface UserMapper {
     @Select("select * from user where invited_by=#{openId} and user.`rank`=1")
     List<User> getInviteUsers(String openId);
 
+    // 查询用户邀请下线列表
+    @Select("select * from user where invited_by=#{openId}")
+    List<User> getAllReferrals(String openId);
     // 更新用户信息， by 微信获取的信息
     @Insert("insert into user (id, openid, nick_name, gender, city, province, country, avatar_url, unionid, create_time, invited_by) values(#{id}," +
             "#{openId}," +

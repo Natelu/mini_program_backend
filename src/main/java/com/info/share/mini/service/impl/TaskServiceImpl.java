@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.info.share.mini.entity.*;
 import com.info.share.mini.mapper.TaskMapper;
+import com.info.share.mini.mapper.UserMapper;
 import com.info.share.mini.service.TaskService;
+import com.info.share.mini.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequest;
@@ -20,6 +22,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +42,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Resource(name = "highLevelClient")
     private RestHighLevelClient esClient;
+
+    @Resource(name = "userMapper")
+    private UserMapper userMapper;
+
+    @Resource(name = "userService")
+    private UserService userService;
 
     @Override
     public JSONObject getTaskList(int page, int pageSize){
@@ -174,7 +183,10 @@ public class TaskServiceImpl implements TaskService {
                 String id = UUID.randomUUID().toString();
                 id = id.replace("-", "");
                 Task task = taskMapper.getTaskDetail(taskId);
-                taskMapper.createDoTask(id, userId, taskId, TaskStatus.doing.name(), task.getName());
+                User user = userMapper.getUserInfo(userId);
+                float extraMoney = task.getMoney()*getBonusPercentage(userId);
+                taskMapper.createDoTask(id, userId, user.getNick_name(), taskId, task.getTaskOwner(),
+                        TaskStatus.doing.name(), task.getName(), task.getMoney(), extraMoney);
                 res = ResultJSON.success("任务领取成功");
             }
         }catch (Exception e){
@@ -216,6 +228,14 @@ public class TaskServiceImpl implements TaskService {
             res = ResultJSON.error(e.getLocalizedMessage());
         }
         return JSONObject.parseObject(res.toString());
+    }
+    // 发展下线，提升的佣金比例
+    public float getBonusPercentage(String userId){
+        // 获取用户徒弟数
+        List<User> users = userService.getReferralList(userId);
+        float percentage = 0.0f;
+        percentage += users.size()*0.02;
+        return Math.min(0.1f, percentage);
     }
 }
 enum TaskStatus {

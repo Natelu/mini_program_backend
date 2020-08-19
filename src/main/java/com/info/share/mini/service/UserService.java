@@ -2,8 +2,10 @@ package com.info.share.mini.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.info.share.mini.entity.User;
 
 import javax.servlet.http.Cookie;
+import java.util.List;
 
 public interface UserService {
     // fetchUsers : get the Users by userId which was judged by userId;
@@ -32,4 +34,7 @@ public interface UserService {
     JSONObject invitedVipUsersByOpenId(String openId);
 
     JSONObject getUserList(int page, int pageNumber);
+
+    // 获取用户徒弟(下线)列表
+    List<User> getReferralList(String openId);
 }

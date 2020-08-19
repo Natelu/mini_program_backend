@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.info.share.mini.entity.*;
 import com.info.share.mini.mapper.NetworkMapper;
+import com.info.share.mini.mapper.TaskMapper;
 import com.info.share.mini.service.NetworkService;
 import com.info.share.mini.service.UserService;
 import com.info.share.mini.mapper.UserMapper;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,9 @@ public class UserServiceImple implements UserService {
 
     @Resource(name = "networkService")
     private NetworkService networkService;
+
+    @Resource(name = "taskMapper")
+    private TaskMapper taskMapper;
 
     @Override
     public JSONObject fetchUser(Cookie[] cookies, String openId){
@@ -266,5 +271,29 @@ public class UserServiceImple implements UserService {
             res = ResultJSON.error(e.getLocalizedMessage());
         }
         return JSONObject.parseObject(res.toString());
+    }
+
+    @Override
+    public List<User> getReferralList(String openId) {
+        List<User> users = new ArrayList<>();
+        try{
+            // 获取用户邀请的所有下线用户列表
+            users = userMapper.getAllReferrals(openId);
+            // 过滤掉没完成任务用户
+            for(User user:users){
+                // 查询当前用户的任务领取列表
+                List<TaskDo> taskDos = taskMapper.getDoTasksByUser(openId);
+                for(TaskDo taskDo:taskDos){
+                    // 如果当前用户有完成任务 则保留，否则去除
+                    if(taskDo.getStatus().equals(TaskStatus.done.toString())){
+                        continue;
+                    }
+                }
+                users.remove(user);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return users;
     }
 }

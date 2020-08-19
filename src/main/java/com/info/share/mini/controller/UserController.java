@@ -2,7 +2,9 @@ package com.info.share.mini.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.info.share.mini.entity.ResultJSON;
+import com.info.share.mini.entity.User;
 import com.info.share.mini.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Api(value = "用户接口列表", tags = {"3. 用户接口列表"})
 @RestController
@@ -96,7 +99,7 @@ public class UserController {
         return JSONObject.toJSONString(res);
     }
 
-    @ApiOperation(value = "获取该邀请的VIP用户", notes = "获取邀请的VIP用户", httpMethod = "GET")
+    @ApiOperation(value = "获取该用户邀请的VIP用户", notes = "获取邀请的VIP用户", httpMethod = "GET")
     @GetMapping(value = "/user/invitedVips", produces = {"application/json;charset=UTF-8"})
     public String getInvitedVipByUser(@RequestParam("openid") String openId,
                                       HttpServletResponse response){
@@ -110,5 +113,20 @@ public class UserController {
         response.setStatus(res.getIntValue("code"));
         logger.info(res.toJSONString());
         return JSONObject.toJSONString(res);
+    }
+
+    @ApiOperation(value = "获取该用户的徒弟数", notes = "徒弟：经用户邀请，并完成任务", httpMethod = "GET")
+    @GetMapping(value = "/user/invitedVips", produces = {"application/json;charset=UTF-8"})
+    public JSONObject getReffrals(@RequestParam("openid") String openId,
+                                      HttpServletResponse response){
+        ResultJSON res;
+        if (userService.checkExists(openId)){
+            List<User> users = userService.getReferralList(openId);
+            res = ResultJSON.success(users);
+        }else { //用户不存在
+            res = ResultJSON.success(200, "无此用户。");
+        }
+        response.setStatus(res.getCode());
+        return JSONObject.parseObject(res.toSimpleDataString());
     }
 }

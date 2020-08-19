@@ -3,6 +3,7 @@ package com.info.share.mini.mapper;
 import com.alibaba.fastjson.JSONObject;
 import com.info.share.mini.entity.Article;
 import org.apache.ibatis.annotations.*;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

@@ -28,7 +28,7 @@ public class WxPayServiceImpl implements WxPayService {
     @Resource(name = "taskMapper")
     private TaskMapper taskMapper;
 
-    @Override public JSONObject getWxPrePayId(WxPreOrder wxPreOrder, String taskId, String type, String wxNumber) {
+    @Override public JSONObject getWxPrePayId(WxPreOrder wxPreOrder, String taskId, String type, String wxNumber, String phoneNumber) {
         ResultJSON res ;
         try {
             // step 1: 请求微信支付api， 获取微信订单
@@ -47,9 +47,8 @@ public class WxPayServiceImpl implements WxPayService {
                 res = ResultJSON.error("无此任务");
                 return JSONObject.parseObject(res.toSimpleString());
             }
-            JSONObject billingRes = billingService.createBilling(id, wxPreOrder.getOpenid(), wxNumber, payId, taskId,
-                    task.getName(), wxPreOrder.getTotal_fee(),
-                    type, BillingConstants.BillingStatus.CREATED.toString());
+            JSONObject billingRes = billingService.createBilling(id, wxPreOrder.getOpenid(), wxNumber, phoneNumber, payId, taskId,
+                    task.getName(), wxPreOrder.getTotal_fee(), type, BillingConstants.BillingStatus.CREATED.toString());
             if(billingRes.getIntValue("code") != 200){
                 return billingRes;
             }

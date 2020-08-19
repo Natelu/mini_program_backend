@@ -26,6 +26,7 @@ public class WechatPayController {
     @GetMapping(value = "/prePayId", produces = {"application/json;charset=UTF-8"})
     public JSONObject getPayId(@RequestParam(value = "openid") String userId,
                                @RequestParam(value = "wxNumber") String wxNumber,
+                               @RequestParam(value = "phoneNumber") String phoneNumber,
                                @RequestParam(value = "taskId") String taskId,
                                @RequestParam(value = "totalMoney") int totalMoney,
                                @RequestParam(value = "isBuyUsers", defaultValue = "true") boolean isBuyUsers,
@@ -44,7 +45,7 @@ public class WechatPayController {
             payType = BillingConstants.BillingType.BUY_VIP.toString();
             wxPreOrder.setBody("用户VIP充值。");
         }
-        JSONObject res = wxPayService.getWxPrePayId(wxPreOrder, taskId, payType, wxNumber);
+        JSONObject res = wxPayService.getWxPrePayId(wxPreOrder, taskId, payType, wxNumber, phoneNumber);
         response.setStatus(res.getIntValue("code"));
         return res;
     }

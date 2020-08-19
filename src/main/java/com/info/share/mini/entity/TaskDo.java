@@ -10,11 +10,56 @@ public class TaskDo {
     private String id;
     private String userId;
     private String taskId;
-    private String isCharge;
+    private boolean isCharge;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneTime;
+    private String taskName;
+    private String status;
+    private String phoneNumber;
+    private float baseMoney;
+    private float extraMoney;
+
+    public boolean isCharge() {
+        return isCharge;
+    }
+
+    public void setCharge(boolean charge) {
+        isCharge = charge;
+    }
+
+    public float getBaseMoney() {
+        return baseMoney;
+    }
+
+    public void setBaseMoney(float baseMoney) {
+        this.baseMoney = baseMoney;
+    }
+
+    public float getExtraMoney() {
+        return extraMoney;
+    }
+
+    public void setExtraMoney(float extraMoney) {
+        this.extraMoney = extraMoney;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getTaskName() {
         return taskName;
@@ -23,9 +68,6 @@ public class TaskDo {
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
-
-    private String taskName;
-
 
     public String getId() {
         return id;
@@ -51,11 +93,11 @@ public class TaskDo {
         this.taskId = taskId;
     }
 
-    public String getIsCharge() {
+    public boolean getIsCharge() {
         return isCharge;
     }
 
-    public void setIsCharge(String isCharge) {
+    public void setIsCharge(boolean isCharge) {
         this.isCharge = isCharge;
     }
 

@@ -21,10 +21,10 @@ public class BillingServiceImpl implements BillingService {
     private BillingMapper billingMapper;
 
     @Override
-    public JSONObject createBilling(String id, String userId, String wxNumber, String wxPayId, String taskId, String taskName, int money, String type, String status) {
+    public JSONObject createBilling(String id, String userId, String wxNumber, String phoneNumber, String wxPayId, String taskId, String taskName, int money, String type, String status) {
         ResultJSON res;
         try {
-            billingMapper.insertBilling(id, userId, wxNumber, wxPayId, taskId, taskName, money, type, status);
+            billingMapper.insertBilling(id, userId, wxNumber, phoneNumber, wxPayId, taskId, taskName, money, type, status);
             res = ResultJSON.success("添加订单成功");
         }catch (Exception e){
             logger.error(e.getLocalizedMessage());
