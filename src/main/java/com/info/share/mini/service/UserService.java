@@ -37,4 +37,7 @@ public interface UserService {
 
     // 获取用户徒弟(下线)列表
     List<User> getReferralList(String openId);
+
+    // 获取奖金比例
+    float getBonusPercentage(String userId);
 }

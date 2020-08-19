@@ -21,6 +21,16 @@ public class Task {
     // 任务佣金
     private float money;
 
+    private float extraMoney;
+
+    public float getExtraMoney() {
+        return extraMoney;
+    }
+
+    public void setExtraMoney(float extraMoney) {
+        this.extraMoney = extraMoney;
+    }
+
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 

@@ -147,10 +147,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public JSONObject getTaskDetail(String id){
+    public JSONObject getTaskDetail(String userId, String id){
         ResultJSON res ;
         try{
+            float percentage = userService.getBonusPercentage(userId);
             Task task = taskMapper.getTaskDetail(id);
+            task.setExtraMoney(task.getMoney()*percentage);
             res = ResultJSON.success(task);
         }catch (Exception e){
             logger.error(e.getMessage());
