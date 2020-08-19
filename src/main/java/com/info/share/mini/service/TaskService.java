@@ -15,7 +15,7 @@ public interface TaskService {
     JSONObject searchTask(String keyword, int page, int pageSize);
 
     // 任务详情（by id)
-    JSONObject getTaskDetail(String id);
+    JSONObject getTaskDetail(String userId, String id);
 
     // 任务详情 (by name)
     JSONObject getTaskDetailByName(String name);

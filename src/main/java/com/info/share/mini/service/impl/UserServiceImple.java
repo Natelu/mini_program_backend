@@ -296,4 +296,14 @@ public class UserServiceImple implements UserService {
         }
         return users;
     }
+
+    // 发展下线，提升的佣金比例
+    @Override
+    public float getBonusPercentage(String userId){
+        // 获取用户徒弟数
+        List<User> users = getReferralList(userId);
+        float percentage = 0.0f;
+        percentage += users.size()*0.02;
+        return Math.min(0.1f, percentage);
+    }
 }

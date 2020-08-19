@@ -75,8 +75,9 @@ public class TaskController {
     @ApiOperation(value = "获取任务详情，通过id", httpMethod = "GET")
     @GetMapping(value = "/detail/byId/{id}", produces = {"application/json;charset=UTF-8"})
     public JSONObject getTaskDetail(@PathVariable("id") String id,
+                                    @PathVariable("openId") String openId,
                                  HttpServletResponse response){
-        JSONObject res = taskService.getTaskDetail(id);
+        JSONObject res = taskService.getTaskDetail(openId, id);
         response.setStatus(res.getIntValue("code"));
         return res;
     }
