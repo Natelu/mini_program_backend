@@ -101,7 +101,7 @@ public class TaskController {
     }
 
     @ApiOperation(value = "用户已领取任务列表", notes= "用户领取的所有任务列表", httpMethod = "GET")
-    @GetMapping(value = "/doing/tasks/{accountId}/", produces = {"application/json;charset=UTF-8"})
+    @GetMapping(value = "/doing/tasks/{accountId}", produces = {"application/json;charset=UTF-8"})
     public JSONObject doingTasksList(@PathVariable("accountId") String accountId, @RequestParam(value = "pageNumber" , defaultValue = "1") int page,
                                      @RequestParam(value = "pageSize" , defaultValue = "10") int pageSize,
                                      HttpServletResponse response){

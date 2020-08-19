@@ -24,6 +24,16 @@ public class Task {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    private String taskName;
+
     public String getTaskOwner() {
         return taskOwner;
     }

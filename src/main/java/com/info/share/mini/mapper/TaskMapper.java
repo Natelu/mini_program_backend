@@ -33,9 +33,9 @@ public interface TaskMapper {
     Task getTaskDetailByName(String name);
 
     // 任务领取
-    @Insert("insert into do_task (id, user_id, task_id, status, create_time) values(#{id}, #{userId}, #{taskId}," +
-            " #{status}, now())")
-    void createDoTask(String id, String userId, String taskId, String status);
+    @Insert("insert into do_task (id, user_id, task_id, status, create_time, task_name) values(#{id}, #{userId}, #{taskId}," +
+            " #{status}, now(), #{name})")
+    void createDoTask(String id, String userId, String taskId, String status, String name);
 
     // 更改用户任务状态
     @Update("update do_task set status = #{status} where user_id=#{userId} and task_id=#{taskId}")

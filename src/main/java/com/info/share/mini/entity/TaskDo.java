@@ -16,6 +16,17 @@ public class TaskDo {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneTime;
 
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    private String taskName;
+
+
     public String getId() {
         return id;
     }

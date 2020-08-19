@@ -1,5 +1,7 @@
 package com.info.share.mini.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class WxPreOrder {
 
     private String appid;
@@ -147,5 +149,10 @@ public class WxPreOrder {
 
     public void setProduct_id(String product_id) {
         this.product_id = product_id;
+    }
+
+    @Override
+    public String toString(){
+        return JSONObject.toJSONString(this);
     }
 }

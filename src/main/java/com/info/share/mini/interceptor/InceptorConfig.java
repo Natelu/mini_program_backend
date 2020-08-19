@@ -14,7 +14,7 @@ public class InceptorConfig extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(permissionInterceptor).addPathPatterns("/**").excludePathPatterns("/user/setVip")
-                .excludePathPatterns("/weChat/auth/QRImage").excludePathPatterns("/wxpay/callback");
+                .excludePathPatterns("/weChat/auth/QRImage").excludePathPatterns("/wxpay/callback").excludePathPatterns("/weChat/auth/register/byWeChat");
     }
 
     @Override

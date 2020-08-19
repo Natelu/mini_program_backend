@@ -38,7 +38,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(parameters)
-//                .host("www.qsssss.com")
+                .host("www.qsssss.com")
                 ;
     }
 

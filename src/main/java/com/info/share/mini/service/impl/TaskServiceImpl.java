@@ -85,7 +85,7 @@ public class TaskServiceImpl implements TaskService {
         highlightBuilder.field(field1).preTags(preTag).postTags(postTag);
         highlightBuilder.field(field2).preTags(preTag).postTags(postTag);
 
-        //设置索引 article
+        //设置索引 task
         SearchRequest searchRequest = new SearchRequest("task");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.query(builder);
@@ -94,7 +94,7 @@ public class TaskServiceImpl implements TaskService {
         sourceBuilder.highlighter(highlightBuilder);
         sourceBuilder.timeout(new TimeValue(1000));
         searchRequest.source(sourceBuilder);
-        searchRequest.types("article");
+        searchRequest.types("task");
 
         //搜索
         SearchResponse response = null;
@@ -173,7 +173,8 @@ public class TaskServiceImpl implements TaskService {
             }else{
                 String id = UUID.randomUUID().toString();
                 id = id.replace("-", "");
-                taskMapper.createDoTask(id, userId, taskId, TaskStatus.doing.name());
+                Task task = taskMapper.getTaskDetail(taskId);
+                taskMapper.createDoTask(id, userId, taskId, TaskStatus.doing.name(), task.getName());
                 res = ResultJSON.success("任务领取成功");
             }
         }catch (Exception e){

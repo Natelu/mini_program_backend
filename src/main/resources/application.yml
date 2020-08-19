@@ -56,11 +56,11 @@ mybatis:
 wechat:
   code2SessionUrl: api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
   accessTokenUrl: api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-  appId: wx3ab7d45aeb09ce37
-  appSecret: 73b54c99840affc65387b737a7d9f621
-  appKey: xxxxx
-  mchId: xxxx
-  notifyUrl: xxx
+  appId: wxf097011600bf3b75
+  appSecret: 5da30a6486ab4a4512a3970b8dd29941
+  appKey: WvJRPEXdKkEzBE5njtJD1FjDwHSNfhlm
+  mchId: 1601916308
+  notifyUrl: https://www.qsssss.com/wxpay/notify
   buildOrder: api.mch.weixin.qq.com/pay/unifiedorder
   QRImagePath: ${StaticResource}/QRImages/
   nginxUrl: https://www.qsssss.com/static/QRImages/

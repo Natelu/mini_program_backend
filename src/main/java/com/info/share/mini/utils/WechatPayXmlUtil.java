@@ -2,6 +2,8 @@ package com.info.share.mini.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.info.share.mini.entity.WxPreOrder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 
 import javax.xml.XMLConstants;
@@ -16,6 +18,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 public class WechatPayXmlUtil {
+
+    private static final Logger logger = LogManager.getLogger(WechatPayXmlUtil.class);
     public static DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -58,6 +62,7 @@ public class WechatPayXmlUtil {
         StreamResult result = new StreamResult(writer);
         transformer.transform(source, result);
         String output = writer.getBuffer().toString(); //.replaceAll("\n|\r", "");
+        logger.info("待请求的支付参数" + output);
         try {
             writer.close();
         }
