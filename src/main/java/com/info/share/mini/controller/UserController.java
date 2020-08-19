@@ -116,8 +116,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "获取该用户的徒弟数", notes = "徒弟：经用户邀请，并完成任务", httpMethod = "GET")
-    @GetMapping(value = "/user/invitedVips", produces = {"application/json;charset=UTF-8"})
-    public JSONObject getReffrals(@RequestParam("openid") String openId,
+    @GetMapping(value = "/user/getRefferals", produces = {"application/json;charset=UTF-8"})
+    public JSONObject getRefferals(@RequestParam("openid") String openId,
                                       HttpServletResponse response){
         ResultJSON res;
         if (userService.checkExists(openId)){
