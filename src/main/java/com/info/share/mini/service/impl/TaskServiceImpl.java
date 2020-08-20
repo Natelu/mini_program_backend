@@ -65,6 +65,21 @@ public class TaskServiceImpl implements TaskService {
         return JSONObject.parseObject(res.toString());
     }
 
+    @Override public JSONObject getAllTaskDoList(int page, int pageSize) {
+        ResultJSON res ;
+        try{
+            PageHelper.startPage(page, pageSize);
+            List<TaskDo> taskDos = taskMapper.getTaskDoList();
+            PageInfo pageInfo = new PageInfo(taskDos);
+            int totalPage = pageInfo.getPages();
+            res = ResultJSON.success(page, pageSize, totalPage, taskDos);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            res = ResultJSON.error(e.getLocalizedMessage());
+        }
+        return JSONObject.parseObject(res.toString());
+    }
+
     @Override
     public JSONObject uploadTask(String name, String wechat, String wechatCode, String introduce, float money, String taskOwner) {
         ResultJSON res;

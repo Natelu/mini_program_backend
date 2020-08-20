@@ -20,6 +20,24 @@ public class TaskDo {
     private String phoneNumber;
     private float baseMoney;
     private float extraMoney;
+    private String userName;
+    private String taskWechat;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getTaskWechat() {
+        return taskWechat;
+    }
+
+    public void setTaskWechat(String taskWechat) {
+        this.taskWechat = taskWechat;
+    }
 
     public boolean isCharge() {
         return isCharge;
