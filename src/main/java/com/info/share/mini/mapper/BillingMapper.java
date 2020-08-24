@@ -1,9 +1,13 @@
 package com.info.share.mini.mapper;
 
+import com.info.share.mini.entity.Billing;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Mapper
 @Service(value = "billingMapper")
@@ -15,4 +19,7 @@ public interface BillingMapper {
 
     @Update("update billing set status=#{status} where wx_pay_id=#{wxPayId}")
     void updateBillingStatus(String wxPayId, String status);
+
+    @Select("select * from billing where status='SUCCESS' order by create_time desc")
+    List<Billing> fetchALlSuccessBillings();
 }

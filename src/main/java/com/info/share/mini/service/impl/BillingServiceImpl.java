@@ -1,6 +1,8 @@
 package com.info.share.mini.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.info.share.mini.entity.Billing;
 import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.mapper.BillingMapper;
 import com.info.share.mini.service.BillingService;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("billingService")
 @Component
@@ -43,5 +47,19 @@ public class BillingServiceImpl implements BillingService {
             res = ResultJSON.error("更新订单失败");
         }
         return JSONObject.parseObject(res.toSimpleString());
+    }
+
+    @Override
+    public JSONObject fetchAllBillings() {
+        ResultJSON res;
+        List<Billing> billingList = new ArrayList<>();
+        try{
+            billingList = billingMapper.fetchALlSuccessBillings();
+        }catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+        res = ResultJSON.success(billingList);
+        return JSON.parseObject(res.toSimpleDataString());
     }
 }
