@@ -8,6 +8,9 @@ public interface TaskService {
     // 任务列表
     JSONObject getTaskList(int page, int pageSize);
 
+    // 所有做任务列表
+    JSONObject getAllTaskDoList(int page, int pageSize);
+
     // 上传任务
     JSONObject uploadTask(String name, String wechat, String wechatCode, String introduce, float money, String taskOwner);
 

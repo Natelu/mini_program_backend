@@ -18,6 +18,9 @@ public interface TaskMapper {
     @Select("select * from task order by publish_time desc")
     List<Task> getTaskList();
 
+    // 获取做任务列表
+    @Select("select * from do_task order by user_name desc")
+    List<TaskDo> getTaskDoList();
     // 上传任务
     @Insert("insert into task (id, name, service_wechat, service_wechat_code, introduce, money, publish_time, task_owner) " +
             "values(#{id}, #{name}, #{service_wechat}, #{service_wechat_code}, #{introduce}, #{money}, now(), #{taskOwner})")

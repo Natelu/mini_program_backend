@@ -1,5 +1,6 @@
 package com.info.share.mini.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.info.share.mini.entity.ResultJSON;
 import com.info.share.mini.entity.Task;
@@ -73,8 +74,8 @@ public class TaskController {
 
     // 任务详情
     @ApiOperation(value = "获取任务详情，通过id", httpMethod = "GET")
-    @GetMapping(value = "/detail/byId/{id}", produces = {"application/json;charset=UTF-8"})
-    public JSONObject getTaskDetail(@PathVariable("id") String id,
+    @GetMapping(value = "/detail/byId/{taskId}/{openId}", produces = {"application/json;charset=UTF-8"})
+    public JSONObject getTaskDetail(@PathVariable("taskId") String id,
                                     @PathVariable("openId") String openId,
                                  HttpServletResponse response){
         JSONObject res = taskService.getTaskDetail(openId, id);
@@ -116,6 +117,15 @@ public class TaskController {
     public JSONObject doneTask(@PathVariable("accountId") String accountId, @PathVariable("taskId") String taskId,
                                 HttpServletResponse response){
         JSONObject res = taskService.doneTaskByUser(accountId, taskId);
+        response.setStatus(res.getIntValue("code"));
+        return res;
+    }
+
+    @ApiOperation(value = "做任务列表", notes = "管理后台调用， 批量获取做任务列表", httpMethod = "GET")
+    @GetMapping(value = "/managet/taskList", produces = {"application/json;charset=UTF-8"})
+    public JSONObject getAllTaskDoList(HttpServletResponse response,@RequestParam(value = "pageNumber" , defaultValue = "1") int page,
+    @RequestParam(value = "pageSize" , defaultValue = "10") int pageSize){
+        JSONObject res = taskService.getAllTaskDoList(page, pageSize);
         response.setStatus(res.getIntValue("code"));
         return res;
     }
