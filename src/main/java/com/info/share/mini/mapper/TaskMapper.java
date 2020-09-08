@@ -15,7 +15,7 @@ import java.util.List;
 public interface TaskMapper {
 
     // 获取任务列表
-    @Select("select * from task order by publish_time desc")
+    @Select("select * from task where delete_time is null order by publish_time desc")
     List<Task> getTaskList();
 
     // 获取做任务列表
